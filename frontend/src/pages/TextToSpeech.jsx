@@ -12,7 +12,7 @@ function TextToSpeech() {
     setLoading(true);
 
     try {
-      const response = await fetch('http://localhost:3000/dev/api/speech', {
+      const response = await fetch('/dev/api/speech', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
