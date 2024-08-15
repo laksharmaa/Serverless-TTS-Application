@@ -1,3 +1,27 @@
+# service: express-backend
+
+# provider:
+#   name: aws
+#   runtime: nodejs18.x
+#   region: ap-south-1
+#   environment:
+#     JWT_SECRET: abcd1234  
+
+# functions:
+#   app:
+#     handler: index.handler
+#     events:
+#       - http: 
+#           path: /{proxy+}
+#           method: any
+#           cors: true
+
+# package:
+#   exclude:
+#     - node_modules/aws-sdk/**
+
+# plugins:
+#   - serverless-offline
 service: express-backend
 
 provider:
@@ -6,19 +30,28 @@ provider:
   region: ap-south-1
   environment:
     JWT_SECRET: abcd1234  # Environment variable for your Lambda function
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+      Resource: arn:aws:dynamodb:ap-south-1:905418375464:table/Users
+    - Effect: Allow
+      Action:
+        - polly:SynthesizeSpeech
+      Resource: "*"  # Allow Polly to synthesize speech
 
 functions:
   app:
     handler: index.handler
     events:
-      - http: 
+      - http:
           path: /{proxy+}
           method: any
           cors: true
-
-package:
-  exclude:
-    - node_modules/aws-sdk/**
+# package:
+#   exclude:
+#     - node_modules/aws-sdk/**
 
 plugins:
   - serverless-offline

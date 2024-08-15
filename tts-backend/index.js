@@ -11,7 +11,7 @@ const app = express();
 app.use(express.json());
 
 const dynamoDb = new AWS.DynamoDB.DocumentClient();
-const USERS_TABLE = 'meriTable'; // Make sure this matches your DynamoDB table name
+const USERS_TABLE = 'Users'; // Make sure this matches your DynamoDB table name
 const JWT_SECRET = process.env.JWT_SECRET || 'abcd1234'; // Use a more secure secret in production
 
 // User Registration Endpoint
@@ -122,12 +122,12 @@ app.post('/api/speech', authenticateToken, async (req, res) => {
 });
 
 // Start the server (for local testing)
-if (process.env.NODE_ENV !== 'lambda') {
-    const PORT = process.env.PORT || 3000;
-    app.listen(PORT, () => {
-        console.log(`SERVER STARTED- http://localhost:${PORT}`);
-    });
-}
+// if (process.env.NODE_ENV !== 'lambda') {
+//     const PORT = process.env.PORT || 3000;
+//     app.listen(PORT, () => {
+//         console.log(`SERVER STARTED- http://localhost:${PORT}`);
+//     });
+// }
 
 // Export the app wrapped in serverless-http
 module.exports.handler = serverless(app);

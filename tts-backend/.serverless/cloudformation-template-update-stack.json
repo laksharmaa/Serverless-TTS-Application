@@ -134,6 +134,21 @@
                       "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/express-backend-dev*:*:*"
                     }
                   ]
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "dynamodb:GetItem",
+                    "dynamodb:PutItem"
+                  ],
+                  "Resource": "arn:aws:dynamodb:ap-south-1:905418375464:table/Users"
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "polly:SynthesizeSpeech"
+                  ],
+                  "Resource": "*"
                 }
               ]
             }
@@ -162,7 +177,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/express-backend/dev/1723578647128-2024-08-13T19:50:47.128Z/express-backend.zip"
+          "S3Key": "serverless/express-backend/dev/1723742627827-2024-08-15T17:23:47.827Z/express-backend.zip"
         },
         "Handler": "index.handler",
         "Runtime": "nodejs18.x",
@@ -185,14 +200,14 @@
         "AppLogGroup"
       ]
     },
-    "AppLambdaVersionI1CntTCVoL6wExjsIT6GfocH4Bv47VT4SfOMIB4": {
+    "AppLambdaVersionk5yoC7FFQJL6Lkq0D3QENIJK6YrwgMTEnm2G0faBY": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "AppLambdaFunction"
         },
-        "CodeSha256": "n93mz6WrGqBKPUx6cC8lq0c4lhEcX1Orc78osE70g8A="
+        "CodeSha256": "AnalltIQbpL1iGvxV0imTkTjyAYn22JSbXSqoWc9p/g="
       }
     },
     "ApiGatewayRestApi": {
@@ -313,7 +328,7 @@
         "AppLambdaPermissionApiGateway"
       ]
     },
-    "ApiGatewayDeployment1723578642200": {
+    "ApiGatewayDeployment1723742613603": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -376,7 +391,7 @@
     "AppLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "AppLambdaVersionI1CntTCVoL6wExjsIT6GfocH4Bv47VT4SfOMIB4"
+        "Ref": "AppLambdaVersionk5yoC7FFQJL6Lkq0D3QENIJK6YrwgMTEnm2G0faBY"
       },
       "Export": {
         "Name": "sls-express-backend-dev-AppLambdaFunctionQualifiedArn"

@@ -18,7 +18,8 @@
     "nodemon": "^3.1.4",
     "offline": "^0.0.1",
     "serverless": "^4.1.22",
-    "serverless-http": "^3.2.0"
+    "serverless-http": "^3.2.0",
+    "tts-backend": "file:"
   },
   "devDependencies": {
     "serverless-offline": "^14.0.0"

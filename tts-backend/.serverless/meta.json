@@ -18,6 +18,23 @@
               "environment": {
                 "JWT_SECRET": "<REDACTED>"
               },
+              "iamRoleStatements": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "dynamodb:GetItem",
+                    "dynamodb:PutItem"
+                  ],
+                  "Resource": "arn:aws:dynamodb:ap-south-1:905418375464:table/Users"
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "polly:SynthesizeSpeech"
+                  ],
+                  "Resource": "*"
+                }
+              ],
               "stage": "dev",
               "versionFunctions": true,
               "compiledCloudFormationTemplate": {
@@ -156,6 +173,21 @@
                                     "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/express-backend-dev*:*:*"
                                   }
                                 ]
+                              },
+                              {
+                                "Effect": "Allow",
+                                "Action": [
+                                  "dynamodb:GetItem",
+                                  "dynamodb:PutItem"
+                                ],
+                                "Resource": "arn:aws:dynamodb:ap-south-1:905418375464:table/Users"
+                              },
+                              {
+                                "Effect": "Allow",
+                                "Action": [
+                                  "polly:SynthesizeSpeech"
+                                ],
+                                "Resource": "*"
                               }
                             ]
                           }
@@ -184,7 +216,7 @@
                         "S3Bucket": {
                           "Ref": "ServerlessDeploymentBucket"
                         },
-                        "S3Key": "serverless/express-backend/dev/1723578647128-2024-08-13T19:50:47.128Z/express-backend.zip"
+                        "S3Key": "serverless/express-backend/dev/1723742627827-2024-08-15T17:23:47.827Z/express-backend.zip"
                       },
                       "Handler": "index.handler",
                       "Runtime": "nodejs18.x",
@@ -207,14 +239,14 @@
                       "AppLogGroup"
                     ]
                   },
-                  "AppLambdaVersionI1CntTCVoL6wExjsIT6GfocH4Bv47VT4SfOMIB4": {
+                  "AppLambdaVersionk5yoC7FFQJL6Lkq0D3QENIJK6YrwgMTEnm2G0faBY": {
                     "Type": "AWS::Lambda::Version",
                     "DeletionPolicy": "Retain",
                     "Properties": {
                       "FunctionName": {
                         "Ref": "AppLambdaFunction"
                       },
-                      "CodeSha256": "n93mz6WrGqBKPUx6cC8lq0c4lhEcX1Orc78osE70g8A="
+                      "CodeSha256": "AnalltIQbpL1iGvxV0imTkTjyAYn22JSbXSqoWc9p/g="
                     }
                   },
                   "ApiGatewayRestApi": {
@@ -335,7 +367,7 @@
                       "AppLambdaPermissionApiGateway"
                     ]
                   },
-                  "ApiGatewayDeployment1723578642200": {
+                  "ApiGatewayDeployment1723742613603": {
                     "Type": "AWS::ApiGateway::Deployment",
                     "Properties": {
                       "RestApiId": {
@@ -398,7 +430,7 @@
                   "AppLambdaFunctionQualifiedArn": {
                     "Description": "Current Lambda function version",
                     "Value": {
-                      "Ref": "AppLambdaVersionI1CntTCVoL6wExjsIT6GfocH4Bv47VT4SfOMIB4"
+                      "Ref": "AppLambdaVersionk5yoC7FFQJL6Lkq0D3QENIJK6YrwgMTEnm2G0faBY"
                     },
                     "Export": {
                       "Name": "sls-express-backend-dev-AppLambdaFunctionQualifiedArn"
@@ -551,16 +583,8 @@
                 "timeout": 6,
                 "runtime": "nodejs18.x",
                 "vpc": {},
-                "versionLogicalId": "AppLambdaVersionI1CntTCVoL6wExjsIT6GfocH4Bv47VT4SfOMIB4"
+                "versionLogicalId": "AppLambdaVersionk5yoC7FFQJL6Lkq0D3QENIJK6YrwgMTEnm2G0faBY"
               }
-            },
-            "package": {
-              "exclude": [
-                "node_modules/aws-sdk/**"
-              ],
-              "artifactsS3KeyDirname": "serverless/express-backend/dev/code-artifacts",
-              "artifact": "D:\\Dev\\serverless\\tts-backend\\.serverless\\express-backend.zip",
-              "artifactDirectoryName": "serverless/express-backend/dev/1723578647128-2024-08-13T19:50:47.128Z"
             },
             "plugins": [
               "serverless-offline"
@@ -590,6 +614,23 @@
         "environment": {
           "JWT_SECRET": "<REDACTED>"
         },
+        "iamRoleStatements": [
+          {
+            "Effect": "Allow",
+            "Action": [
+              "dynamodb:GetItem",
+              "dynamodb:PutItem"
+            ],
+            "Resource": "arn:aws:dynamodb:ap-south-1:905418375464:table/Users"
+          },
+          {
+            "Effect": "Allow",
+            "Action": [
+              "polly:SynthesizeSpeech"
+            ],
+            "Resource": "*"
+          }
+        ],
         "stage": "dev",
         "versionFunctions": true,
         "compiledCloudFormationTemplate": {
@@ -728,6 +769,21 @@
                               "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/express-backend-dev*:*:*"
                             }
                           ]
+                        },
+                        {
+                          "Effect": "Allow",
+                          "Action": [
+                            "dynamodb:GetItem",
+                            "dynamodb:PutItem"
+                          ],
+                          "Resource": "arn:aws:dynamodb:ap-south-1:905418375464:table/Users"
+                        },
+                        {
+                          "Effect": "Allow",
+                          "Action": [
+                            "polly:SynthesizeSpeech"
+                          ],
+                          "Resource": "*"
                         }
                       ]
                     }
@@ -756,7 +812,7 @@
                   "S3Bucket": {
                     "Ref": "ServerlessDeploymentBucket"
                   },
-                  "S3Key": "serverless/express-backend/dev/1723578647128-2024-08-13T19:50:47.128Z/express-backend.zip"
+                  "S3Key": "serverless/express-backend/dev/1723742627827-2024-08-15T17:23:47.827Z/express-backend.zip"
                 },
                 "Handler": "index.handler",
                 "Runtime": "nodejs18.x",
@@ -779,14 +835,14 @@
                 "AppLogGroup"
               ]
             },
-            "AppLambdaVersionI1CntTCVoL6wExjsIT6GfocH4Bv47VT4SfOMIB4": {
+            "AppLambdaVersionk5yoC7FFQJL6Lkq0D3QENIJK6YrwgMTEnm2G0faBY": {
               "Type": "AWS::Lambda::Version",
               "DeletionPolicy": "Retain",
               "Properties": {
                 "FunctionName": {
                   "Ref": "AppLambdaFunction"
                 },
-                "CodeSha256": "n93mz6WrGqBKPUx6cC8lq0c4lhEcX1Orc78osE70g8A="
+                "CodeSha256": "AnalltIQbpL1iGvxV0imTkTjyAYn22JSbXSqoWc9p/g="
               }
             },
             "ApiGatewayRestApi": {
@@ -907,7 +963,7 @@
                 "AppLambdaPermissionApiGateway"
               ]
             },
-            "ApiGatewayDeployment1723578642200": {
+            "ApiGatewayDeployment1723742613603": {
               "Type": "AWS::ApiGateway::Deployment",
               "Properties": {
                 "RestApiId": {
@@ -970,7 +1026,7 @@
             "AppLambdaFunctionQualifiedArn": {
               "Description": "Current Lambda function version",
               "Value": {
-                "Ref": "AppLambdaVersionI1CntTCVoL6wExjsIT6GfocH4Bv47VT4SfOMIB4"
+                "Ref": "AppLambdaVersionk5yoC7FFQJL6Lkq0D3QENIJK6YrwgMTEnm2G0faBY"
               },
               "Export": {
                 "Name": "sls-express-backend-dev-AppLambdaFunctionQualifiedArn"
@@ -1123,22 +1179,14 @@
           "timeout": 6,
           "runtime": "nodejs18.x",
           "vpc": {},
-          "versionLogicalId": "AppLambdaVersionI1CntTCVoL6wExjsIT6GfocH4Bv47VT4SfOMIB4"
+          "versionLogicalId": "AppLambdaVersionk5yoC7FFQJL6Lkq0D3QENIJK6YrwgMTEnm2G0faBY"
         }
-      },
-      "package": {
-        "exclude": [
-          "node_modules/aws-sdk/**"
-        ],
-        "artifactsS3KeyDirname": "serverless/express-backend/dev/code-artifacts",
-        "artifact": "D:\\Dev\\serverless\\tts-backend\\.serverless\\express-backend.zip",
-        "artifactDirectoryName": "serverless/express-backend/dev/1723578647128-2024-08-13T19:50:47.128Z"
       },
       "plugins": [
         "serverless-offline"
       ]
     },
-    "serviceRawFile": "service: express-backend\r\n\r\nprovider:\r\n  name: aws\r\n  runtime: nodejs18.x\r\n  region: ap-south-1\r\n  environment:\r\n    JWT_SECRET: abcd1234  # Environment variable for your Lambda function\r\n\r\nfunctions:\r\n  app:\r\n    handler: index.handler\r\n    events:\r\n      - http: \r\n          path: /{proxy+}\r\n          method: any\r\n          cors: true\r\n\r\npackage:\r\n  exclude:\r\n    - node_modules/aws-sdk/**\r\n\r\nplugins:\r\n  - serverless-offline\r\n",
+    "serviceRawFile": "# service: express-backend\r\n\r\n# provider:\r\n#   name: aws\r\n#   runtime: nodejs18.x\r\n#   region: ap-south-1\r\n#   environment:\r\n#     JWT_SECRET: abcd1234  \r\n\r\n# functions:\r\n#   app:\r\n#     handler: index.handler\r\n#     events:\r\n#       - http: \r\n#           path: /{proxy+}\r\n#           method: any\r\n#           cors: true\r\n\r\n# package:\r\n#   exclude:\r\n#     - node_modules/aws-sdk/**\r\n\r\n# plugins:\r\n#   - serverless-offline\r\nservice: express-backend\r\n\r\nprovider:\r\n  name: aws\r\n  runtime: nodejs18.x\r\n  region: ap-south-1\r\n  environment:\r\n    JWT_SECRET: abcd1234  # Environment variable for your Lambda function\r\n  iamRoleStatements:\r\n    - Effect: Allow\r\n      Action:\r\n        - dynamodb:GetItem\r\n        - dynamodb:PutItem\r\n      Resource: arn:aws:dynamodb:ap-south-1:905418375464:table/Users\r\n    - Effect: Allow\r\n      Action:\r\n        - polly:SynthesizeSpeech\r\n      Resource: \"*\"  # Allow Polly to synthesize speech\r\n\r\nfunctions:\r\n  app:\r\n    handler: index.handler\r\n    events:\r\n      - http:\r\n          path: /{proxy+}\r\n          method: any\r\n          cors: true\r\n# package:\r\n#   exclude:\r\n#     - node_modules/aws-sdk/**\r\n\r\nplugins:\r\n  - serverless-offline\r\n",
     "command": [
       "deploy"
     ],
@@ -1170,12 +1218,12 @@
     "integrations": {},
     "serviceProviderAwsCfStackId": "arn:aws:cloudformation:ap-south-1:905418375464:stack/express-backend-dev/e0be1240-59aa-11ef-94ed-0a60d99b091d",
     "serviceProviderAwsCfStackCreated": "2024-08-13T19:33:12.223Z",
-    "serviceProviderAwsCfStackUpdated": "2024-08-13T19:47:51.123Z",
+    "serviceProviderAwsCfStackUpdated": "2024-08-15T17:24:02.519Z",
     "serviceProviderAwsCfStackStatus": "UPDATE_COMPLETE",
     "serviceProviderAwsCfStackOutputs": [
       {
         "OutputKey": "AppLambdaFunctionQualifiedArn",
-        "OutputValue": "arn:aws:lambda:ap-south-1:905418375464:function:express-backend-dev-app:2",
+        "OutputValue": "arn:aws:lambda:ap-south-1:905418375464:function:express-backend-dev-app:8",
         "Description": "Current Lambda function version",
         "ExportName": "sls-express-backend-dev-AppLambdaFunctionQualifiedArn"
       },
