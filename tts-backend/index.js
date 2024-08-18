@@ -95,6 +95,7 @@ function authenticateToken(req, res, next) {
 app.post('/api/speech', authenticateToken, async (req, res) => {
     const { text } = req.body;
 
+
     if (!text) {
         return res.status(400).json({ error: 'Text is required' });
     }
