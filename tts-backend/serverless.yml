@@ -1,0 +1,39 @@
+service: new-express-backend
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: ap-south-1
+  environment:
+    JWT_SECRET: abcd1234
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:Query
+        - dynamodb:DeleteItem
+      Resource:
+        - arn:aws:dynamodb:ap-south-1:905418375464:table/Users         # Permissions for the Users table
+        - arn:aws:dynamodb:ap-south-1:905418375464:table/SavedBlogs       # Permissions for the SavedBlogs table
+    - Effect: Allow
+      Action:
+        - polly:SynthesizeSpeech
+      Resource: "*"
+
+functions:
+  app:
+    handler: app.handler
+    events:
+      - http:
+          path: /{proxy+}
+          method: any
+          cors: true
+
+# package:
+#   exclude:
+#     - node_modules/aws-sdk/**
+
+plugins:
+  - serverless-offline
