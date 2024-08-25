@@ -206,7 +206,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/new-express-backend/dev/1724486014164-2024-08-24T07:53:34.164Z/new-express-backend.zip"
+                "S3Key": "serverless/new-express-backend/dev/1724586106518-2024-08-25T11:41:46.518Z/new-express-backend.zip"
               },
               "Handler": "app.handler",
               "Runtime": "nodejs18.x",
@@ -229,14 +229,14 @@
               "AppLogGroup"
             ]
           },
-          "AppLambdaVersionku1TAC6Diu9J3KQZw6NPuuAh6PIOAYytjBwTifAG6Fg": {
+          "AppLambdaVersionn73LmyaBe4ydTRL39x0CXpnam8U81mR2l3LQ9u0wHRI": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "AppLambdaFunction"
               },
-              "CodeSha256": "43/1tRv5YNYOLvs7k0tvAKPJsmMOek83sP0foJWxZqs="
+              "CodeSha256": "U8w+7ZCUjLjIwvLEy8ICW2u4ru1eNyKfdbDRBkHReP4="
             }
           },
           "ApiGatewayRestApi": {
@@ -357,7 +357,7 @@
               "AppLambdaPermissionApiGateway"
             ]
           },
-          "ApiGatewayDeployment1724486007511": {
+          "ApiGatewayDeployment1724586080598": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -420,7 +420,7 @@
           "AppLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "AppLambdaVersionku1TAC6Diu9J3KQZw6NPuuAh6PIOAYytjBwTifAG6Fg"
+              "Ref": "AppLambdaVersionn73LmyaBe4ydTRL39x0CXpnam8U81mR2l3LQ9u0wHRI"
             },
             "Export": {
               "Name": "sls-new-express-backend-dev-AppLambdaFunctionQualifiedArn"
@@ -577,7 +577,7 @@
         "timeout": 6,
         "runtime": "nodejs18.x",
         "vpc": {},
-        "versionLogicalId": "AppLambdaVersionku1TAC6Diu9J3KQZw6NPuuAh6PIOAYytjBwTifAG6Fg"
+        "versionLogicalId": "AppLambdaVersionn73LmyaBe4ydTRL39x0CXpnam8U81mR2l3LQ9u0wHRI"
       }
     },
     "configValidationMode": "warn",
@@ -600,7 +600,7 @@
     "artifact": "D:\\Dev\\serverlessClone\\tts-backend\\.serverless\\new-express-backend.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/new-express-backend/dev/1724486014164-2024-08-24T07:53:34.164Z",
+    "artifactDirectoryName": "serverless/new-express-backend/dev/1724586106518-2024-08-25T11:41:46.518Z",
     "artifact": "new-express-backend.zip"
   }
 }
