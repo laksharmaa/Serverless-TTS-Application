@@ -7,7 +7,6 @@ import Register from './routes/Register';
 import Navbar from './components/Navbar';
 import SavedBlogs from './components/SavedBlogs';
 import './index.css';
-import './App.css';
 
 const Layout = () => {
   return (

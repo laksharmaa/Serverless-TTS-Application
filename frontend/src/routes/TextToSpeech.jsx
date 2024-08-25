@@ -80,19 +80,19 @@ function TextToSpeech() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-900 px-4">
       <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg w-full max-w-lg">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white text-center mb-8">Text to Speech</h1>
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white text-center mb-8">Convert a Blog into Podcast</h1>
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label htmlFor="text" className="block text-gray-700 dark:text-gray-300 font-medium mb-2">
+            {/* <label htmlFor="text" className="block text-gray-700 dark:text-gray-300 font-medium mb-2">
               Enter Text
-            </label>
+            </label> */}
             <textarea
               id="text"
               value={text}
               onChange={(e) => setText(e.target.value)}
               className="w-full p-4 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 focus:border-transparent"
               rows="4"
-              placeholder="Enter text to convert to speech..."
+              placeholder="Paste the text of any blog post..."
               required
             />
           </div>
@@ -100,7 +100,7 @@ function TextToSpeech() {
             type="submit"
             className="w-full bg-indigo-600 dark:bg-indigo-500 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 dark:hover:bg-indigo-600 transition duration-200 focus:ring-4 focus:ring-indigo-500 dark:focus:ring-indigo-400"
           >
-            Convert to Speech
+            Convert
           </button>
         </form>
         {audioUrl && (
