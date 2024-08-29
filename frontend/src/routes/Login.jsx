@@ -4,14 +4,14 @@ import { useNavigate } from 'react-router-dom';
 function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [loggedIn, setLoggedIn] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const url = '/dev/login';
+    // const url = '/dev/login';
+    const url = `${import.meta.env.VITE_API_BASE_URL}/login`;
 
-    console.log('Fetching from URL:', url);
+
     try {
       const response = await fetch(url, {
         method: 'POST',
@@ -22,8 +22,7 @@ function Login() {
       const data = await response.json();
       if (response.ok) {
         localStorage.setItem('token', data.token);
-        setLoggedIn(true);
-        
+        window.dispatchEvent(new Event('storage'));
         navigate('/text-to-speech');
       } else {
         alert(data.error);
@@ -63,9 +62,9 @@ function Login() {
           </div>
           <button
             type="submit"
-            className="w-full bg-blue-600 dark:bg-indigo-500 text-white py-2 rounded-lg hover:bg-blue-700 dark:hover:bg-indigo-600 transition-colors duration-300 hover:scale-105 transform"
+            className="w-full bg-blue-600 hover:bg-blue-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition-colors duration-300"
           >
-            Login
+            Log In
           </button>
         </form>
       </div>

@@ -13,7 +13,7 @@ function SavedBlogs() {
       }
 
       try {
-        const response = await fetch('/dev/api/get-blogs', {
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/get-blogs`, {
           method: 'GET',
           headers: {
             Authorization: `Bearer ${token}`,
@@ -43,8 +43,9 @@ function SavedBlogs() {
       return;
     }
 
-    // Get the username from the first blog item (assuming the user is the same for all blogs)
     const username = blogs[0]?.username;
+
+    // console.log(blogs);
 
     if (!username) {
       alert('Username not found.');
@@ -58,7 +59,7 @@ function SavedBlogs() {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ username, blogId }),  // Include both username and blogId
+        body: JSON.stringify({ username, blogId }),
       });
 
       if (response.ok) {
@@ -74,25 +75,36 @@ function SavedBlogs() {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-900 px-4">
-      <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg w-full max-w-3xl">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white text-center mb-8">Saved Blogs</h1>
-        {blogs.length === 0 ? (
-          <p className="text-gray-700 dark:text-gray-300 text-center">No blogs found.</p>
-        ) : (
-          blogs.map((blog) => (
-            <div key={blog.blogId} className="mb-4 p-4 bg-gray-100 dark:bg-gray-700 rounded-lg shadow-md">
-              <p className="text-gray-900 dark:text-white mb-2"><strong>Text:</strong> {blog.blogContent}</p>
-              {/* <audio controls src={blog.audioUrl} className="w-full rounded-lg shadow-sm" /> */}
+      <h1 className="text-3xl font-bold text-gray-900 dark:text-white text-center mb-8">Saved Blogs</h1>
+      {blogs.length === 0 ? (
+        <p className="text-gray-700 dark:text-gray-300 text-center">No blogs found.</p>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {blogs.map((blog) => (
+            <div
+              key={blog.blogId}
+              className="relative bg-gray-100 dark:bg-gray-700 p-6 rounded-lg shadow-lg transform transition duration-500 hover:scale-105 hover:shadow-2xl"
+            >
+              {/* Timestamp */}
+              <span className="absolute bottom-2 right-2 text-gray-600 dark:text-gray-300 text-xs">
+                {new Date(blog.createdAt).toLocaleString()}
+              </span>
+
+              {/* <p className="text-gray-900 dark:text-white mb-4"><strong>Text:</strong> {blog.blogContent}</p> */}
+              <p className="text-gray-900 dark:text-white mb-4">
+                <strong>Text:</strong> {blog.blogContent.split(' ').slice(0, 50).join(' ')}...
+              </p>
+
               <button
                 onClick={() => handleDeleteBlog(blog.blogId)}
-                className="mt-4 bg-red-500 text-white py-2 px-4 rounded-lg"
+                className="mt-4 bg-red-500 text-white py-2 px-4 rounded-lg transform transition duration-300 hover:bg-red-700 hover:scale-110"
               >
                 Delete
               </button>
             </div>
-          ))
-        )}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

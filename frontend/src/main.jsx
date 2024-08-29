@@ -1,6 +1,7 @@
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
-import { StrictMode } from 'react';
+import { StrictMode, useState, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
+import { useNavigate } from 'react-router-dom';
 import Login from './routes/Login';
 import TextToSpeech from './routes/TextToSpeech';
 import Register from './routes/Register';
@@ -9,14 +10,39 @@ import SavedBlogs from './components/SavedBlogs';
 import './index.css';
 
 const Layout = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('token'));
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const handleStorageChange = () => {
+      const token = localStorage.getItem('token');
+      setIsLoggedIn(!!token);
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    setIsLoggedIn(false);
+    navigate('/login'); // Redirect to login page after logout
+  };
+
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-200 flex flex-col">
-      <Navbar />
-      <div className="flex-grow p-4">
-        <Outlet />
+      <Navbar isLoggedIn={isLoggedIn} onLogout={handleLogout} />
+      <div className="flex-grow flex flex-col p-4 overflow-hidden">
+        <div className="flex-grow overflow-y-auto">
+          <Outlet />
+        </div>
       </div>
     </div>
   );
+  
 }
 
 const router = createBrowserRouter([
@@ -26,10 +52,10 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <TextToSpeech />,
+        element: <SavedBlogs />,
       },
       {
-        path: "/text-to-speech", 
+        path: "/text-to-speech",
         element: <TextToSpeech />,
       },
       {

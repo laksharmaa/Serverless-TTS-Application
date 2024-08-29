@@ -23,7 +23,6 @@ const synthesizeSpeech = async (req, res) => {
         const audioBase64 = result.AudioStream.toString('base64');
         const audioUrl = `data:audio/mpeg;base64,${audioBase64}`;
 
-        console.log(`Audio URL: ${audioUrl}`); // Log the URL in the console for debugging
         res.json({ audioUrl });
     } catch (error) {
         console.error('Error synthesizing speech:', error);
