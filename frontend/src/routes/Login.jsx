@@ -8,9 +8,8 @@ function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // const url = '/dev/login';
-    const url = `${import.meta.env.VITE_API_BASE_URL}/login`;
-
+    const url = '/dev/login';
+    // const url = `${import.meta.env.VITE_API_BASE_URL}/login`;
 
     try {
       const response = await fetch(url, {

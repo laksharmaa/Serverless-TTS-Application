@@ -23,7 +23,8 @@ function TextToSpeech() {
     }
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/speech`, {
+      // const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/speech`, {
+      const response = await fetch('/dev/api/speech', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

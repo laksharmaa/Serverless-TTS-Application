@@ -13,7 +13,8 @@ function SavedBlogs() {
       }
 
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/get-blogs`, {
+        // const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/get-blogs`, {
+        const response = await fetch('dev/api/get-blogs', {
           method: 'GET',
           headers: {
             Authorization: `Bearer ${token}`,

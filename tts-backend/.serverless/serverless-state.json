@@ -206,7 +206,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/new-express-backend/dev/1724645853991-2024-08-26T04:17:33.991Z/new-express-backend.zip"
+                "S3Key": "serverless/new-express-backend/dev/1725028086146-2024-08-30T14:28:06.146Z/new-express-backend.zip"
               },
               "Handler": "app.handler",
               "Runtime": "nodejs18.x",
@@ -229,14 +229,14 @@
               "AppLogGroup"
             ]
           },
-          "AppLambdaVersionucHup4AAGfhPd7LW80HyBo8hAPtZcxq9ziQfvtHaAU": {
+          "AppLambdaVersionVhQtiazlPIqp7rSaKlad47GTIcBoRJ3ubmyWM5yax4": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "AppLambdaFunction"
               },
-              "CodeSha256": "RIU3s97Doyb7n0eTrWbuh+bR5WCmA6QzT5uZlOzbrO4="
+              "CodeSha256": "OWN6LHU9jDL1gkBZdNt9/VWoX1FjOZ8tkrZlGKMbnmc="
             }
           },
           "ApiGatewayRestApi": {
@@ -294,7 +294,7 @@
                     "StatusCode": "200",
                     "ResponseParameters": {
                       "method.response.header.Access-Control-Allow-Origin": "'*'",
-                      "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,X-Amzn-Trace-Id'",
+                      "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization'",
                       "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,DELETE,GET,HEAD,PATCH,POST,PUT'"
                     },
                     "ResponseTemplates": {
@@ -357,7 +357,7 @@
               "AppLambdaPermissionApiGateway"
             ]
           },
-          "ApiGatewayDeployment1724645844983": {
+          "ApiGatewayDeployment1725028074484": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -420,7 +420,7 @@
           "AppLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "AppLambdaVersionucHup4AAGfhPd7LW80HyBo8hAPtZcxq9ziQfvtHaAU"
+              "Ref": "AppLambdaVersionVhQtiazlPIqp7rSaKlad47GTIcBoRJ3ubmyWM5yax4"
             },
             "Export": {
               "Name": "sls-new-express-backend-dev-AppLambdaFunctionQualifiedArn"
@@ -558,12 +558,7 @@
                 ],
                 "headers": [
                   "Content-Type",
-                  "X-Amz-Date",
-                  "Authorization",
-                  "X-Api-Key",
-                  "X-Amz-Security-Token",
-                  "X-Amz-User-Agent",
-                  "X-Amzn-Trace-Id"
+                  "Authorization"
                 ],
                 "allowCredentials": false
               },
@@ -577,7 +572,7 @@
         "timeout": 6,
         "runtime": "nodejs18.x",
         "vpc": {},
-        "versionLogicalId": "AppLambdaVersionucHup4AAGfhPd7LW80HyBo8hAPtZcxq9ziQfvtHaAU"
+        "versionLogicalId": "AppLambdaVersionVhQtiazlPIqp7rSaKlad47GTIcBoRJ3ubmyWM5yax4"
       }
     },
     "configValidationMode": "warn",
@@ -600,7 +595,7 @@
     "artifact": "D:\\Dev\\serverlessClone\\tts-backend\\.serverless\\new-express-backend.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/new-express-backend/dev/1724645853991-2024-08-26T04:17:33.991Z",
+    "artifactDirectoryName": "serverless/new-express-backend/dev/1725028086146-2024-08-30T14:28:06.146Z",
     "artifact": "new-express-backend.zip"
   }
 }
