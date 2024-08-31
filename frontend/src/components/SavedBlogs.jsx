@@ -54,7 +54,8 @@ function SavedBlogs() {
     }
 
     try {
-      const response = await fetch(`/dev/api/delete-blog`, {
+      const url= import.meta.env.VITE_API_BASE_URL;
+      const response = await fetch(`${url}/api/delete-blog`, {
         method: 'DELETE',
         headers: {
           Authorization: `Bearer ${token}`,
