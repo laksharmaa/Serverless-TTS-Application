@@ -57,8 +57,10 @@ function TextToSpeech() {
     const username = decodedToken.username;
     const blogContent = text;
 
+
     try {
-      const response = await fetch('/dev/api/save-blog', {
+      const url= import.meta.env.VITE_API_BASE_URL;
+      const response = await fetch(`${url}/api/save-blog`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
