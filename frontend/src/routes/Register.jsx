@@ -8,8 +8,9 @@ function Register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const url= import.meta.env.VITE_API_BASE_URL;
     // const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/register`, {
-    const response = await fetch('/dev/register', {
+    const response = await fetch(`${url}/register`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username, password }),

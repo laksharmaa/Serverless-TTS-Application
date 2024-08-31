@@ -8,11 +8,11 @@ function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const url = '/dev/login';
-    // const url = `${import.meta.env.VITE_API_BASE_URL}/login`;
+    // const url = '/dev/login';
+    const url= import.meta.env.VITE_API_BASE_URL;
 
     try {
-      const response = await fetch(url, {
+      const response = await fetch(`${url}/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password }),
