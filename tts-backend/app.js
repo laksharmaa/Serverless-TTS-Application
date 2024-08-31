@@ -6,9 +6,17 @@ const { saveBlog } = require('./saveBlog');
 const { getBlogs } = require('./getBlogs'); 
 const { deleteBlog } = require('./deleteBlog');
 const authenticateToken = require('./authenticateToken');
+const cors = require('cors');
 
 const app = express();
 app.use(express.json());
+
+// CORS Middleware
+app.use(cors({
+    origin: '*', // Allow all origins; adjust as necessary for security
+    methods: ['GET', 'POST', 'DELETE'], // Adjust methods according to your needs
+    allowedHeaders: ['Content-Type', 'Authorization'], // Specify the headers your API supports
+}));
 
 // User Registration Endpoint
 app.post('/register', registerUser);

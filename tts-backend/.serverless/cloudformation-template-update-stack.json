@@ -183,7 +183,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/new-express-backend/dev/1725028086146-2024-08-30T14:28:06.146Z/new-express-backend.zip"
+          "S3Key": "serverless/new-express-backend/dev/1725096263463-2024-08-31T09:24:23.463Z/new-express-backend.zip"
         },
         "Handler": "app.handler",
         "Runtime": "nodejs18.x",
@@ -206,14 +206,14 @@
         "AppLogGroup"
       ]
     },
-    "AppLambdaVersionVhQtiazlPIqp7rSaKlad47GTIcBoRJ3ubmyWM5yax4": {
+    "AppLambdaVersionzTMrOJS3M8UL0tiKCdZtVmSZ9fYD3moKxHNeu2gfGE": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "AppLambdaFunction"
         },
-        "CodeSha256": "OWN6LHU9jDL1gkBZdNt9/VWoX1FjOZ8tkrZlGKMbnmc="
+        "CodeSha256": "gfFLuwlxdCHae4uGG+585uc1fLVtgpjmUPXKwVAk4uY="
       }
     },
     "ApiGatewayRestApi": {
@@ -271,7 +271,7 @@
               "StatusCode": "200",
               "ResponseParameters": {
                 "method.response.header.Access-Control-Allow-Origin": "'*'",
-                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization'",
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
                 "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,DELETE,GET,HEAD,PATCH,POST,PUT'"
               },
               "ResponseTemplates": {
@@ -334,7 +334,7 @@
         "AppLambdaPermissionApiGateway"
       ]
     },
-    "ApiGatewayDeployment1725028074484": {
+    "ApiGatewayDeployment1725096237264": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -397,7 +397,7 @@
     "AppLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "AppLambdaVersionVhQtiazlPIqp7rSaKlad47GTIcBoRJ3ubmyWM5yax4"
+        "Ref": "AppLambdaVersionzTMrOJS3M8UL0tiKCdZtVmSZ9fYD3moKxHNeu2gfGE"
       },
       "Export": {
         "Name": "sls-new-express-backend-dev-AppLambdaFunctionQualifiedArn"

@@ -1,5 +1,5 @@
 {
-  "D:\\Dev\\serverlessClone\\tts-backend": {
+  "D:\\Dev\\BaseProject\\Serverless-TTS-Application\\tts-backend": {
     "versionSfCore": null,
     "versionFramework": "4.2.4",
     "isWithinCompose": false,
@@ -9,7 +9,7 @@
       "default-aws-credential-resolver": "<REDACTED>"
     },
     "composeServiceName": null,
-    "servicePath": "D:\\Dev\\serverlessClone\\tts-backend",
+    "servicePath": "D:\\Dev\\BaseProject\\Serverless-TTS-Application\\tts-backend",
     "serviceConfigFileName": "serverless.yml",
     "service": {
       "service": "new-express-backend",
@@ -230,7 +230,7 @@
                   "S3Bucket": {
                     "Ref": "ServerlessDeploymentBucket"
                   },
-                  "S3Key": "serverless/new-express-backend/dev/1725028086146-2024-08-30T14:28:06.146Z/new-express-backend.zip"
+                  "S3Key": "serverless/new-express-backend/dev/1725096263463-2024-08-31T09:24:23.463Z/new-express-backend.zip"
                 },
                 "Handler": "app.handler",
                 "Runtime": "nodejs18.x",
@@ -253,14 +253,14 @@
                 "AppLogGroup"
               ]
             },
-            "AppLambdaVersionVhQtiazlPIqp7rSaKlad47GTIcBoRJ3ubmyWM5yax4": {
+            "AppLambdaVersionzTMrOJS3M8UL0tiKCdZtVmSZ9fYD3moKxHNeu2gfGE": {
               "Type": "AWS::Lambda::Version",
               "DeletionPolicy": "Retain",
               "Properties": {
                 "FunctionName": {
                   "Ref": "AppLambdaFunction"
                 },
-                "CodeSha256": "OWN6LHU9jDL1gkBZdNt9/VWoX1FjOZ8tkrZlGKMbnmc="
+                "CodeSha256": "gfFLuwlxdCHae4uGG+585uc1fLVtgpjmUPXKwVAk4uY="
               }
             },
             "ApiGatewayRestApi": {
@@ -318,7 +318,7 @@
                       "StatusCode": "200",
                       "ResponseParameters": {
                         "method.response.header.Access-Control-Allow-Origin": "'*'",
-                        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization'",
+                        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
                         "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,DELETE,GET,HEAD,PATCH,POST,PUT'"
                       },
                       "ResponseTemplates": {
@@ -381,7 +381,7 @@
                 "AppLambdaPermissionApiGateway"
               ]
             },
-            "ApiGatewayDeployment1725028074484": {
+            "ApiGatewayDeployment1725096237264": {
               "Type": "AWS::ApiGateway::Deployment",
               "Properties": {
                 "RestApiId": {
@@ -444,7 +444,7 @@
             "AppLambdaFunctionQualifiedArn": {
               "Description": "Current Lambda function version",
               "Value": {
-                "Ref": "AppLambdaVersionVhQtiazlPIqp7rSaKlad47GTIcBoRJ3ubmyWM5yax4"
+                "Ref": "AppLambdaVersionzTMrOJS3M8UL0tiKCdZtVmSZ9fYD3moKxHNeu2gfGE"
               },
               "Export": {
                 "Name": "sls-new-express-backend-dev-AppLambdaFunctionQualifiedArn"
@@ -578,7 +578,11 @@
                   ],
                   "headers": [
                     "Content-Type",
-                    "Authorization"
+                    "Authorization",
+                    "X-Amz-Date",
+                    "X-Api-Key",
+                    "X-Amz-Security-Token",
+                    "X-Amz-User-Agent"
                   ],
                   "allowCredentials": "<REDACTED>"
                 },
@@ -592,14 +596,14 @@
           "timeout": 6,
           "runtime": "nodejs18.x",
           "vpc": {},
-          "versionLogicalId": "AppLambdaVersionVhQtiazlPIqp7rSaKlad47GTIcBoRJ3ubmyWM5yax4"
+          "versionLogicalId": "AppLambdaVersionzTMrOJS3M8UL0tiKCdZtVmSZ9fYD3moKxHNeu2gfGE"
         }
       },
       "plugins": [
         "serverless-offline"
       ]
     },
-    "serviceRawFile": "service: new-express-backend\r\n\r\nprovider:\r\n  name: aws\r\n  runtime: nodejs18.x\r\n  region: ap-south-1\r\n  environment:\r\n    JWT_SECRET: abcd1234\r\n  iamRoleStatements:\r\n    - Effect: Allow\r\n      Action:\r\n        - dynamodb:GetItem\r\n        - dynamodb:PutItem\r\n        - dynamodb:UpdateItem\r\n        - dynamodb:Query\r\n        - dynamodb:DeleteItem\r\n      Resource:\r\n        - arn:aws:dynamodb:ap-south-1:905418375464:table/Users         # Permissions for the Users table\r\n        - arn:aws:dynamodb:ap-south-1:905418375464:table/SavedBlogs       # Permissions for the SavedBlogs table\r\n    - Effect: Allow\r\n      Action:\r\n        - polly:SynthesizeSpeech\r\n      Resource: \"*\"\r\n\r\n# functions:\r\n#   app:\r\n#     handler: app.handler\r\n#     events:\r\n#       - http:\r\n#           path: /{proxy+}\r\n#           method: any\r\n#           cors: true\r\nfunctions:\r\n  app:\r\n    handler: app.handler\r\n    events:\r\n      - http:\r\n          path: /{proxy+}\r\n          method: any\r\n          cors:\r\n            origin: '*'\r\n            headers:\r\n              - Content-Type\r\n              - Authorization\r\n            allowCredentials: false\r\n# package:\r\n#   exclude:\r\n#     - node_modules/aws-sdk/**\r\n\r\nplugins:\r\n  - serverless-offline\r\n",
+    "serviceRawFile": "service: new-express-backend\r\n\r\nprovider:\r\n  name: aws\r\n  runtime: nodejs18.x\r\n  region: ap-south-1\r\n  environment:\r\n    JWT_SECRET: abcd1234\r\n  iamRoleStatements:\r\n    - Effect: Allow\r\n      Action:\r\n        - dynamodb:GetItem\r\n        - dynamodb:PutItem\r\n        - dynamodb:UpdateItem\r\n        - dynamodb:Query\r\n        - dynamodb:DeleteItem\r\n      Resource:\r\n        - arn:aws:dynamodb:ap-south-1:905418375464:table/Users         # Permissions for the Users table\r\n        - arn:aws:dynamodb:ap-south-1:905418375464:table/SavedBlogs       # Permissions for the SavedBlogs table\r\n    - Effect: Allow\r\n      Action:\r\n        - polly:SynthesizeSpeech\r\n      Resource: \"*\"\r\n\r\n# functions:\r\n#   app:\r\n#     handler: app.handler\r\n#     events:\r\n#       - http:\r\n#           path: /{proxy+}\r\n#           method: any\r\n#           cors: true\r\nfunctions:\r\n  app:\r\n    handler: app.handler\r\n    events:\r\n      - http:\r\n          path: /{proxy+}\r\n          method: any\r\n          cors:\r\n            origin: '*'\r\n            headers:\r\n              - Content-Type\r\n              - Authorization\r\n              - X-Amz-Date\r\n              - X-Api-Key\r\n              - X-Amz-Security-Token\r\n              - X-Amz-User-Agent\r\n              \r\n            allowCredentials: false\r\n# package:\r\n#   exclude:\r\n#     - node_modules/aws-sdk/**\r\n\r\nplugins:\r\n  - serverless-offline\r\n",
     "command": [
       "deploy"
     ],
@@ -632,12 +636,12 @@
     "integrations": {},
     "serviceProviderAwsCfStackId": "arn:aws:cloudformation:ap-south-1:905418375464:stack/new-express-backend-dev/3f08b060-5d22-11ef-90d8-0afa86c7df1b",
     "serviceProviderAwsCfStackCreated": "2024-08-18T05:25:14.007Z",
-    "serviceProviderAwsCfStackUpdated": "2024-08-30T14:28:18.353Z",
+    "serviceProviderAwsCfStackUpdated": "2024-08-31T09:24:38.797Z",
     "serviceProviderAwsCfStackStatus": "UPDATE_COMPLETE",
     "serviceProviderAwsCfStackOutputs": [
       {
         "OutputKey": "AppLambdaFunctionQualifiedArn",
-        "OutputValue": "arn:aws:lambda:ap-south-1:905418375464:function:new-express-backend-dev-app:21",
+        "OutputValue": "arn:aws:lambda:ap-south-1:905418375464:function:new-express-backend-dev-app:25",
         "Description": "Current Lambda function version",
         "ExportName": "sls-new-express-backend-dev-AppLambdaFunctionQualifiedArn"
       },
