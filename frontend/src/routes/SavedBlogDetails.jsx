@@ -81,10 +81,10 @@ function SavedBlogDetails() {
         >
           {isLoading ? 'Generating...' : 'Listen'}
         </button>
-        <button className="bg-blue-500 text-white py-2 px-4 rounded-lg transform transition duration-300 hover:bg-blue-700 hover:scale-110"
+        {/* <button className="bg-blue-500 text-white py-2 px-4 rounded-lg transform transition duration-300 hover:bg-blue-700 hover:scale-110"
         >
           {isLoading ? 'Summarizing...' : 'Summarize'}
-        </button>
+        </button> */}
       </div>
 
       {audioUrl && (
