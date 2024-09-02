@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 function SavedBlogs() {
   const [blogs, setBlogs] = useState([]);
@@ -13,7 +14,7 @@ function SavedBlogs() {
       }
 
       try {
-        const url= import.meta.env.VITE_API_BASE_URL;
+        const url = import.meta.env.VITE_API_BASE_URL;
         const response = await fetch(`${url}/api/get-blogs`, {
           method: 'GET',
           headers: {
@@ -54,7 +55,7 @@ function SavedBlogs() {
     }
 
     try {
-      const url= import.meta.env.VITE_API_BASE_URL;
+      const url = import.meta.env.VITE_API_BASE_URL;
       const response = await fetch(`${url}/api/delete-blog`, {
         method: 'DELETE',
         headers: {
@@ -87,16 +88,18 @@ function SavedBlogs() {
               key={blog.blogId}
               className="relative bg-gray-100 dark:bg-gray-700 p-6 rounded-lg shadow-lg transform transition duration-500 hover:scale-105 hover:shadow-2xl"
             >
-              {/* Timestamp */}
-              <span className="absolute bottom-2 right-2 text-gray-600 dark:text-gray-300 text-xs">
-                {new Date(blog.createdAt).toLocaleString()}
-              </span>
-
-              {/* <p className="text-gray-900 dark:text-white mb-4"><strong>Text:</strong> {blog.blogContent}</p> */}
-              <p className="text-gray-900 dark:text-white mb-4">
-                <strong>Text:</strong> {blog.blogContent.split(' ').slice(0, 50).join(' ')}...
-              </p>
-
+              <Link
+                to={`/saved-blogs/${blog.blogId}`} // Dynamic route
+                state={{ blog }} // Pass blog data through state
+              >
+                {/* <h2 className="text-lg font-bold">{blog.title}</h2> */}
+                <p className="text-gray-900 dark:text-white mb-4">
+                  <strong>Text:</strong> {blog.blogContent.split(' ').slice(0, 50).join(' ')}...
+                </p>
+                <span className="absolute bottom-2 right-2 text-gray-600 dark:text-gray-300 text-xs">
+                  {new Date(blog.createdAt).toLocaleString()}
+                </span>
+              </Link>
               <button
                 onClick={() => handleDeleteBlog(blog.blogId)}
                 className="mt-4 bg-red-500 text-white py-2 px-4 rounded-lg transform transition duration-300 hover:bg-red-700 hover:scale-110"

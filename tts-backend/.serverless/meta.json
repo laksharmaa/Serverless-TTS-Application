@@ -230,7 +230,7 @@
                   "S3Bucket": {
                     "Ref": "ServerlessDeploymentBucket"
                   },
-                  "S3Key": "serverless/new-express-backend/dev/1725096263463-2024-08-31T09:24:23.463Z/new-express-backend.zip"
+                  "S3Key": "serverless/new-express-backend/dev/1725259862260-2024-09-02T06:51:02.260Z/new-express-backend.zip"
                 },
                 "Handler": "app.handler",
                 "Runtime": "nodejs18.x",
@@ -253,14 +253,14 @@
                 "AppLogGroup"
               ]
             },
-            "AppLambdaVersionzTMrOJS3M8UL0tiKCdZtVmSZ9fYD3moKxHNeu2gfGE": {
+            "AppLambdaVersiongWIfjbnz1fwHqoQzfkY6zpBdiIKDSIwjaiKaxvM3w": {
               "Type": "AWS::Lambda::Version",
               "DeletionPolicy": "Retain",
               "Properties": {
                 "FunctionName": {
                   "Ref": "AppLambdaFunction"
                 },
-                "CodeSha256": "gfFLuwlxdCHae4uGG+585uc1fLVtgpjmUPXKwVAk4uY="
+                "CodeSha256": "gVUlqv1sE4oS69/ZmitFNBsO03v8Ajsp6W3QCsqHhVM="
               }
             },
             "ApiGatewayRestApi": {
@@ -381,7 +381,7 @@
                 "AppLambdaPermissionApiGateway"
               ]
             },
-            "ApiGatewayDeployment1725096237264": {
+            "ApiGatewayDeployment1725259843210": {
               "Type": "AWS::ApiGateway::Deployment",
               "Properties": {
                 "RestApiId": {
@@ -444,7 +444,7 @@
             "AppLambdaFunctionQualifiedArn": {
               "Description": "Current Lambda function version",
               "Value": {
-                "Ref": "AppLambdaVersionzTMrOJS3M8UL0tiKCdZtVmSZ9fYD3moKxHNeu2gfGE"
+                "Ref": "AppLambdaVersiongWIfjbnz1fwHqoQzfkY6zpBdiIKDSIwjaiKaxvM3w"
               },
               "Export": {
                 "Name": "sls-new-express-backend-dev-AppLambdaFunctionQualifiedArn"
@@ -596,7 +596,7 @@
           "timeout": 6,
           "runtime": "nodejs18.x",
           "vpc": {},
-          "versionLogicalId": "AppLambdaVersionzTMrOJS3M8UL0tiKCdZtVmSZ9fYD3moKxHNeu2gfGE"
+          "versionLogicalId": "AppLambdaVersiongWIfjbnz1fwHqoQzfkY6zpBdiIKDSIwjaiKaxvM3w"
         }
       },
       "plugins": [
@@ -636,12 +636,12 @@
     "integrations": {},
     "serviceProviderAwsCfStackId": "arn:aws:cloudformation:ap-south-1:905418375464:stack/new-express-backend-dev/3f08b060-5d22-11ef-90d8-0afa86c7df1b",
     "serviceProviderAwsCfStackCreated": "2024-08-18T05:25:14.007Z",
-    "serviceProviderAwsCfStackUpdated": "2024-08-31T09:24:38.797Z",
+    "serviceProviderAwsCfStackUpdated": "2024-09-02T06:52:01.874Z",
     "serviceProviderAwsCfStackStatus": "UPDATE_COMPLETE",
     "serviceProviderAwsCfStackOutputs": [
       {
         "OutputKey": "AppLambdaFunctionQualifiedArn",
-        "OutputValue": "arn:aws:lambda:ap-south-1:905418375464:function:new-express-backend-dev-app:25",
+        "OutputValue": "arn:aws:lambda:ap-south-1:905418375464:function:new-express-backend-dev-app:26",
         "Description": "Current Lambda function version",
         "ExportName": "sls-new-express-backend-dev-AppLambdaFunctionQualifiedArn"
       },

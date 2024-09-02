@@ -6,6 +6,7 @@ const { saveBlog } = require('./saveBlog');
 const { getBlogs } = require('./getBlogs'); 
 const { deleteBlog } = require('./deleteBlog');
 const authenticateToken = require('./authenticateToken');
+const { getBlogById } = require('./getBlogById');
 const cors = require('cors');
 
 const app = express();
@@ -32,6 +33,9 @@ app.post('/api/save-blog', authenticateToken, saveBlog);
 
 // Get Blogs Endpoint (Requires Authentication)
 app.get('/api/get-blogs', authenticateToken, getBlogs);
+
+// Get Blog by ID Endpoint (Requires Authentication)
+app.get('/api/get-blog/:blogId', authenticateToken, getBlogById);
 
 // Delete Blog Endpoint (Requires Authentication)
 app.delete('/api/delete-blog', authenticateToken, deleteBlog);
