@@ -1,23 +1,30 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
 function SavedBlogDetails() {
   const { state } = useLocation();
-  const blog = state?.blog; // Safely access the blog object
-
+  const blog = state?.blog;
   const [selectedVoice, setSelectedVoice] = useState('Joanna');
   const [audioUrl, setAudioUrl] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isConverting, setIsConverting] = useState(false); // Conversion loader
+  const [loading, setLoading] = useState(true); // Initial loading state
+  const [errorMessage, setErrorMessage] = useState(null);
+
+  useEffect(() => {
+    if (blog) setLoading(false); // When the blog is available, stop loading
+  }, [blog]);
 
   const handleListen = async () => {
     if (!blog) return;
 
-    setIsLoading(true);
+    setIsConverting(true); // Set converting state
+    setErrorMessage(null); // Reset error message
+
     try {
       const token = localStorage.getItem('token');
       if (!token) {
-        alert('You must be logged in to listen to the blog.');
-        setIsLoading(false);
+        setErrorMessage('You must be logged in to listen to the blog.');
+        setIsConverting(false);
         return;
       }
 
@@ -36,14 +43,27 @@ function SavedBlogDetails() {
         setAudioUrl(data.audioUrl);
       } else {
         const errorData = await response.json();
-        alert(errorData.error || 'An error occurred while generating speech.');
+        setErrorMessage(errorData.error || 'An error occurred while generating speech.');
       }
     } catch (error) {
-      alert('An error occurred while generating speech.');
+      setErrorMessage('An error occurred while generating speech.');
     } finally {
-      setIsLoading(false);
+      setIsConverting(false); // Stop converting loader
     }
   };
+
+  // Skeletal Loader for blog
+  const SkeletonLoader = () => (
+    <div className="animate-pulse">
+      <div className="h-6 bg-gray-300 dark:bg-gray-600 rounded mb-4"></div>
+      <div className="h-4 bg-gray-300 dark:bg-gray-600 rounded mb-4"></div>
+      <div className="h-4 bg-gray-300 dark:bg-gray-600 rounded mb-4"></div>
+    </div>
+  );
+
+  if (loading) {
+    return <SkeletonLoader />;
+  }
 
   if (!blog) {
     return <p className="text-gray-900 dark:text-white">Blog not found.</p>;
@@ -51,6 +71,8 @@ function SavedBlogDetails() {
 
   return (
     <div className="bg-gray-100 dark:bg-gray-800 p-6 rounded-lg shadow-lg text-center">
+      {errorMessage && <p className="text-red-500 mb-4">{errorMessage}</p>}
+
       <span className="flex bottom-2 right-2 text-gray-600 dark:text-gray-300 text-xs">
         Saved at: {new Date(blog.createdAt).toLocaleString()}
       </span>
@@ -59,10 +81,9 @@ function SavedBlogDetails() {
         {blog.blogContent.split(' ').slice(0, 1).join(' ')}...
       </h2>
 
-      <p className="text-xl text-gray-700 dark:text-gray-300 mb-6">{blog.blogContent}
-      </p>
+      <p className="text-xl text-gray-700 dark:text-gray-300 mb-6">{blog.blogContent}</p>
 
-      <div className="flex justify-center items-center space-x-4 mb-4"> {/* Flex container */}
+      <div className="flex justify-center items-center space-x-4 mb-4">
         <label className="text-gray-900 dark:text-white">Select Voice:</label>
         <select
           className="p-2 rounded-lg bg-gray-200 dark:bg-gray-600 text-gray-900 dark:text-white"
@@ -79,12 +100,8 @@ function SavedBlogDetails() {
           onClick={handleListen}
           className="bg-blue-500 text-white py-2 px-4 rounded-lg transform transition duration-300 hover:bg-blue-700 hover:scale-110"
         >
-          {isLoading ? 'Generating...' : 'Listen'}
+          {isConverting ? 'Converting...' : 'Listen'}
         </button>
-        {/* <button className="bg-blue-500 text-white py-2 px-4 rounded-lg transform transition duration-300 hover:bg-blue-700 hover:scale-110"
-        >
-          {isLoading ? 'Summarizing...' : 'Summarize'}
-        </button> */}
       </div>
 
       {audioUrl && (

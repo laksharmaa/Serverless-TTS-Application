@@ -28,34 +28,34 @@ function Register() {
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900 flex flex-col items-center justify-center px-4 transform transition duration-500 hover:scale-105">
       <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg w-full max-w-md transition duration-500 ease-in-out hover:shadow-2xl">
         <h2 className="text-3xl font-bold text-gray-900 dark:text-gray-200 text-center mb-8 transform transition duration-500 hover:scale-110">
-          Welcome to Polly Blog
+          Sign up
         </h2>
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label htmlFor="username" className="block text-gray-700 dark:text-gray-300 font-medium mb-2">
+            {/* <label htmlFor="username" className="block text-gray-700 dark:text-gray-300 font-medium mb-2">
               Username
-            </label>
+            </label> */}
             <input
               id="username"
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               className="w-full p-3 border border-gray-300 dark:border-gray-700 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition duration-500 ease-in-out hover:bg-gray-100 dark:hover:bg-gray-700"
-              placeholder="Enter your username"
+              placeholder="Username"
               required
             />
           </div>
           <div>
-            <label htmlFor="password" className="block text-gray-700 dark:text-gray-300 font-medium mb-2">
+            {/* <label htmlFor="password" className="block text-gray-700 dark:text-gray-300 font-medium mb-2">
               Password
-            </label>
+            </label> */}
             <input
               id="password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="w-full p-3 border border-gray-300 dark:border-gray-700 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition duration-500 ease-in-out hover:bg-gray-100 dark:hover:bg-gray-700"
-              placeholder="Enter your password"
+              placeholder="Password"
               required
             />
           </div>
