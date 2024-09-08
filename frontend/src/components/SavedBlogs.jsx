@@ -1,20 +1,24 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 function SavedBlogs() {
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true); // Add loading state
+  const [isAuthenticated, setIsAuthenticated] = useState(true); // Track authentication status
+  const [showLoginPrompt, setShowLoginPrompt] = useState(false); // Show login prompt
+  const navigate = useNavigate(); // useNavigate hook to redirect
 
   useEffect(() => {
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+      setIsAuthenticated(false); // Set authentication status to false
+      setLoading(false); // Stop loading
+      setShowLoginPrompt(true); // Show login prompt
+      return;
+    }
+
     const fetchBlogs = async () => {
-      const token = localStorage.getItem('token');
-
-      if (!token) {
-        alert('You must be logged in to view your saved blogs.');
-        setLoading(false);
-        return;
-      }
-
       try {
         const url = import.meta.env.VITE_API_BASE_URL;
         const response = await fetch(`${url}/api/get-blogs`, {
@@ -45,7 +49,7 @@ function SavedBlogs() {
     const token = localStorage.getItem('token');
 
     if (!token) {
-      alert('You must be logged in to delete a blog.');
+      setShowLoginPrompt(true); // Show login prompt if user is not logged in
       return;
     }
 
@@ -78,6 +82,10 @@ function SavedBlogs() {
     }
   };
 
+  const handleLoginRedirect = () => {
+    navigate('/login');
+  };
+
   // Skeleton loader component with matching size and layout
   const SkeletonLoader = () => (
     <div className="relative bg-gray-300 dark:bg-gray-700 p-6 rounded-lg shadow-lg transform transition duration-500 hover:scale-105 hover:shadow-2xl animate-pulse">
@@ -92,6 +100,26 @@ function SavedBlogs() {
   return (
     <div className="min-h-full bg-gray-100 dark:bg-gray-900 px-4">
       <h1 className="text-2xl text-gray-900 dark:text-white text-center mt-2 mb-2">Saved Blogs</h1>
+      
+      {/* Show login prompt if not authenticated */}
+      {showLoginPrompt && (
+        <div className="flex flex-col items-center justify-center my-8">
+          <p className="text-gray-700 dark:text-gray-300 text-center mb-4">
+            You need to be logged in to view your saved blogs🙂.
+          </p>
+          <button
+            onClick={handleLoginRedirect}
+            className="bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md transform transition duration-300 hover:bg-blue-800"
+          >
+            Log In
+          </button>
+        </div>
+      )}
+      
+      {!isAuthenticated && !loading && (
+        <p className="text-gray-700 dark:text-gray-300 text-center">Please log in to view your saved blogs.</p>
+      )}
+
       {loading ? (
         <div className=" grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {/* Display 6 skeleton loaders */}
@@ -103,7 +131,7 @@ function SavedBlogs() {
           <SkeletonLoader />
         </div>
       ) : blogs.length === 0 ? (
-        <p className="text-gray-700 dark:text-gray-300 text-center">No blogs found.</p>
+        !showLoginPrompt && <p className="text-gray-700 dark:text-gray-300 text-center">No blogs found.</p>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {blogs.map((blog) => (

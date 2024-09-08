@@ -53,7 +53,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <SavedBlogs />,
+        element: <TextToSpeech />,
       },
       {
         path: "/text-to-speech",
