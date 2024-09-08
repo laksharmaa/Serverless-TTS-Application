@@ -20,81 +20,120 @@ function Navbar({ isLoggedIn, onLogout }) {
   const isActiveLink = (path) => location.pathname === path;
 
   return (
-    <nav className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-opacity-80 p-4 sticky top-0 z-10 shadow-lg backdrop-blur-lg">
-      <div className="container mx-auto flex justify-between items-center">
-        <Link to="/" className="flex items-center">
-          <img src={logo} alt="Logo" className="absolute mt-0.5 h-16 w-16 mr-3" /> {/* Logo */}
-          {/* <span className="text-white font-bold text-2xl">Polly Blog</span> */}
-        </Link>
-        <div className="lg:hidden">
-          <button onClick={toggleMenu} className="text-white focus:outline-none">
-            <svg className="h-6 w-6 fill-current" viewBox="0 0 24 24">
-              {isOpen ? (
-                <path
-                  fillRule="evenodd"
-                  clipRule="evenodd"
-                  d="M18.36 6.64a1 1 0 00-1.41 0L12 11.59 7.05 6.64a1 1 0 00-1.41 1.41L10.59 13l-5.05 5.05a1 1 0 001.41 1.41L12 14.41l5.05 5.05a1 1 0 001.41-1.41L13.41 13l5.05-5.05a1 1 0 000-1.41z"
-                />
-              ) : (
-                <path
-                  fillRule="evenodd"
-                  clipRule="evenodd"
-                  d="M4 5h16a1 1 0 010 2H4a1 1 0 010-2zm0 6h16a1 1 0 010 2H4a1 1 0 010-2zm0 6h16a1 1 0 010 2H4a1 1 0 010-2z"
-                />
-              )}
-            </svg>
-          </button>
+    <header className="sticky inset-0 z-50  border-b border-slate-100 bg-opacity-50 backdrop-blur-lg">
+      <nav className="flex mx-auto max-w-6xl gap-8 px-6 transition-all duration-200 ease-in-out lg:px-12 ">
+        {/* Logo */}
+        <div className="absolutex  items-center">
+          <Link to="/">
+            <img src={logo} alt="Logo" className="h-16 w-16" />
+          </Link>
         </div>
-        <div className={`lg:flex lg:items-center ${isOpen ? 'block' : 'hidden'} lg:block`}>
-          <div className="flex flex-col lg:flex-row lg:space-x-6 lg:ml-auto">
-            <Link
-              to="/text-to-speech"
-              className={`${
-                isActiveLink('/text-to-speech') ? 'text-white font-bold' : 'text-gray-200'
-              } hover:text-white block lg:inline-block mt-4 lg:mt-0 transition-transform transform hover:scale-105`}
-            >
-              Narrate Blog
-            </Link>
-            <Link
-              to="/saved-blogs"
-              className={`${
-                isActiveLink('/saved-blogs') ? 'text-white font-bold' : 'text-gray-200'
-              } hover:text-white block lg:inline-block mt-4 lg:mt-0 transition-transform transform hover:scale-105`}
-            >
-              Saved Blogs
-            </Link>
 
-            {isLoggedIn ? (
-              <button
-                onClick={handleLogout}
-                className="text-gray-200 hover:text-white block lg:inline-block mt-4 lg:mt-0 transition-transform transform hover:scale-105"
-              >
-                Logout
-              </button>
-            ) : (
-              <>
-                <Link
-                  to="/login"
-                  className={`${
-                    isActiveLink('/login') ? 'text-white font-bold' : 'text-gray-200'
-                  } hover:text-white block lg:inline-block mt-4 lg:mt-0 transition-transform transform hover:scale-105`}
-                >
-                  Login
-                </Link>
-                <Link
-                  to="/register"
-                  className={`${
-                    isActiveLink('/register') ? 'text-white font-bold' : 'text-gray-200'
-                  } hover:text-white block lg:inline-block mt-4 lg:mt-0 transition-transform transform hover:scale-105`}
-                >
-                  Register
-                </Link>
-              </>
-            )}
-          </div>
-        </div>
+        {/* Navigation Links */}
+        <ul className="hidden items-center justify-center gap-6 md:flex">
+          <li className={`pt-1.5 font-medium ${isActiveLink('/text-to-speech') ? 'text-pink-400 font-bold' : 'text-white-700'}`}>
+            <Link to="/text-to-speech">Narrate Blog</Link>
+          </li>
+          <li className={`pt-1.5 font-medium ${isActiveLink('/saved-blogs') ? 'text-pink-400   font-bold' : 'text-white-700'}`}>
+            <Link to="/saved-blogs">Saved Blogs</Link>
+          </li>
+        </ul>
+
+        {/* Spacer */}
+        <div className="flex-grow"></div>
+
+        {/* User actions */}
+        <div className="hidden items-center justify-center gap-6 md:flex">
+          {isLoggedIn ? (
+            <button
+              onClick={handleLogout}
+              className="text-white-700 hover:text-black font-medium"
+            >
+              Logout
+            </button>
+          ) : (
+            <>
+              <Link to="/login" className={`font-medium ${isActiveLink('/login') ? 'rounded-md bg-gradient-to-br from-blue-600 to-blue-400 px-3 py-1.5 font-medium text-white shadow-md shadow-blue-400/50 transition-transform duration-200 ease-in-out hover:scale-105"' : 'text-white-700'}`}>
+                Sign in
+              </Link>
+              <Link
+                to="/register"
+                className={`font-medium ${isActiveLink('/register') ? 'rounded-md bg-gradient-to-br from-blue-600 to-blue-400 px-3 py-1.5 font-medium text-white shadow-md shadow-blue-400/50 transition-transform duration-200 ease-in-out hover:scale-105"' : 'text-white-700'}`}>
+                  Sign up
+              </Link>
+        </>
+          )}
+      </div>
+
+      {/* Mobile Menu Button */}
+      <div className="relative flex items-center justify-center md:hidden">
+        <button type="button" onClick={toggleMenu}>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth="1.5"
+            stroke="currentColor"
+            aria-hidden="true"
+            className="h-6 w-auto text-white-900"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+            />
+          </svg>
+        </button>
       </div>
     </nav>
+
+      {/* Mobile Menu */ }
+  {
+    isOpen && (
+      <div className="md:hidden bg-white shadow-md p-4 space-y-2">
+        <Link
+          to="/text-to-speech"
+          className="block text-gray-700 font-medium"
+          onClick={toggleMenu}
+        >
+          Narrate Blog
+        </Link>
+        <Link
+          to="/saved-blogs"
+          className="block text-gray-700 font-medium"
+          onClick={toggleMenu}
+        >
+          Saved Blogs
+        </Link>
+        {isLoggedIn ? (
+          <button
+            onClick={handleLogout}
+            className="block text-gray-700 font-medium"
+          >
+            Logout
+          </button>
+        ) : (
+          <>
+            <Link
+              to="/login"
+              className="block text-gray-700 font-medium"
+              onClick={toggleMenu}
+            >
+              Sign in
+            </Link>
+            <Link
+              to="/register"
+              className="block bg-green-600 text-white rounded-md px-3 py-2 text-center"
+              onClick={toggleMenu}
+            >
+              Sign up for free
+            </Link>
+          </>
+        )}
+      </div>
+    )
+  }
+    </header >
   );
 }
 

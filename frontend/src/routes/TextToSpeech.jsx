@@ -141,6 +141,7 @@ function TextToSpeech() {
             <option value="Matthew">Matthew (Male)</option>
             <option value="Salli">Salli (Female)</option>
             <option value="Ivy">Ivy (Female, Child)</option>
+            <option value="Kendra">Kendra (English-US)</option>
           </select>
 
           <label className="text-left text-gray-600 dark:text-gray-400">
