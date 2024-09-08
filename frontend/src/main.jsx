@@ -34,17 +34,17 @@ const Layout = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-200 flex flex-col">
+    <div className="min-h-screen flex flex-col bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-200">
       <Navbar isLoggedIn={isLoggedIn} onLogout={handleLogout} />
-      <div className="flex-grow flex flex-col p-4 overflow-hidden">
-        <div className="flex-grow overflow-y-auto">
+      <div className="flex-grow flex flex-col overflow-hidden"> {/* Adjust this line */}
+        <div className="flex-grow overflow-y-auto h-full"> {/* Adjust this line */}
           <Outlet />
         </div>
       </div>
     </div>
   );
-  
 }
+
 
 const router = createBrowserRouter([
   {

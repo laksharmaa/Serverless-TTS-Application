@@ -81,8 +81,8 @@ function TextToSpeech() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-900 px-4">
-      <h1 className="text-3xl font-bold text-gray-900 dark:text-white text-center mb-8">Convert a Blog into Podcast</h1>
+    <div className="min-h-full flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-900 px-4">
+      <h1 className="text-xl  text-gray-900 dark:text-white text-center m-2">Convert a Blog into Podcast</h1>
       <form onSubmit={handleSubmit} className="w-full h-full flex flex-col space-y-6">
         <textarea
           id="text"
@@ -98,7 +98,7 @@ function TextToSpeech() {
             id="voiceId"
             value={voiceId}
             onChange={(e) => setVoiceId(e.target.value)}
-            className="w-full md:w-auto p-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 focus:border-transparent"
+            className="w-full md:w-auto p-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-pink-500 dark:focus:ring-pink-400 focus:border-transparent"
           >
 
             <option value="Joanna">Joanna (Female)</option>
@@ -121,7 +121,7 @@ function TextToSpeech() {
             </button>
             <button
               onClick={handleSaveBlog}
-              className="w-full md:w-auto font-inter font-medium bg-blue-600 text-white px-4 py-2 rounded-md"
+              className="w-full md:w-auto font-inter font-medium bg-pink-600 text-white px-4 py-2 rounded-md"
             >
               Save Blog
             </button>

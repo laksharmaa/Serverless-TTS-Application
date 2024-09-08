@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 
 function SavedBlogs() {
   const [blogs, setBlogs] = useState([]);
+  const [loading, setLoading] = useState(true); // Add loading state
 
   useEffect(() => {
     const fetchBlogs = async () => {
@@ -10,6 +11,7 @@ function SavedBlogs() {
 
       if (!token) {
         alert('You must be logged in to view your saved blogs.');
+        setLoading(false);
         return;
       }
 
@@ -31,6 +33,8 @@ function SavedBlogs() {
         }
       } catch (error) {
         alert('An error occurred while retrieving blogs.');
+      } finally {
+        setLoading(false); // End loading state
       }
     };
 
@@ -46,8 +50,6 @@ function SavedBlogs() {
     }
 
     const username = blogs[0]?.username;
-
-    // console.log(blogs);
 
     if (!username) {
       alert('Username not found.');
@@ -76,10 +78,31 @@ function SavedBlogs() {
     }
   };
 
+  // Skeleton loader component with matching size and layout
+  const SkeletonLoader = () => (
+    <div className="relative bg-gray-300 dark:bg-gray-700 p-6 rounded-lg shadow-lg transform transition duration-500 hover:scale-105 hover:shadow-2xl animate-pulse">
+      <div className="h-6 bg-gray-400 dark:bg-gray-600 rounded w-3/4 mb-4"></div>
+      <div className="h-4 bg-gray-400 dark:bg-gray-600 rounded w-1/2 mb-2"></div>
+      <div className="h-4 bg-gray-400 dark:bg-gray-600 rounded w-full mb-2"></div>
+      <div className="h-4 bg-gray-400 dark:bg-gray-600 rounded w-5/6 mb-2"></div>
+      <div className="mt-4 bg-red-400 h-10 w-full rounded-lg"></div>
+    </div>
+  );
+
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-900 px-4">
-      <h1 className="text-3xl font-bold text-gray-900 dark:text-white text-center mb-8">Saved Blogs</h1>
-      {blogs.length === 0 ? (
+    <div className="min-h-full bg-gray-100 dark:bg-gray-900 px-4">
+      <h1 className="text-2xl text-gray-900 dark:text-white text-center mt-2 mb-2">Saved Blogs</h1>
+      {loading ? (
+        <div className=" grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {/* Display 6 skeleton loaders */}
+          <SkeletonLoader />
+          <SkeletonLoader />
+          <SkeletonLoader />
+          <SkeletonLoader />
+          <SkeletonLoader />
+          <SkeletonLoader />
+        </div>
+      ) : blogs.length === 0 ? (
         <p className="text-gray-700 dark:text-gray-300 text-center">No blogs found.</p>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -92,9 +115,8 @@ function SavedBlogs() {
                 to={`/saved-blogs/${blog.blogId}`} // Dynamic route
                 state={{ blog }} // Pass blog data through state
               >
-                {/* <h2 className="text-lg font-bold">{blog.title}</h2> */}
                 <p className="text-gray-900 dark:text-white mb-4">
-                  <strong>Text:</strong> {blog.blogContent.split(' ').slice(0, 50).join(' ')}...
+                  <strong>Text:</strong> {blog.blogContent.split(' ').slice(0, 30).join(' ')}...
                 </p>
                 <span className="absolute bottom-2 right-2 text-gray-600 dark:text-gray-300 text-xs">
                   {new Date(blog.createdAt).toLocaleString()}
@@ -102,7 +124,7 @@ function SavedBlogs() {
               </Link>
               <button
                 onClick={() => handleDeleteBlog(blog.blogId)}
-                className="mt-4 bg-red-500 text-white py-2 px-4 rounded-lg transform transition duration-300 hover:bg-red-700 hover:scale-110"
+                className="relative origin-bottom-left mt-4 bg-red-500 text-white py-2 px-4 rounded-lg transform transition duration-300 hover:bg-red-700 hover:scale-110"
               >
                 Delete
               </button>

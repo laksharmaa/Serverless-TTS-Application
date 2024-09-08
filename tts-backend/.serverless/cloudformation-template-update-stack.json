@@ -71,10 +71,22 @@
         }
       }
     },
-    "AppLogGroup": {
+    "AuthServiceLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/new-express-backend-dev-app"
+        "LogGroupName": "/aws/lambda/serverless-microservices-backend-dev-authService"
+      }
+    },
+    "BlogServiceLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/serverless-microservices-backend-dev-blogService"
+      }
+    },
+    "SpeechServiceLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/serverless-microservices-backend-dev-speechService"
       }
     },
     "IamRoleLambdaExecution": {
@@ -102,7 +114,7 @@
               "Fn::Join": [
                 "-",
                 [
-                  "new-express-backend",
+                  "serverless-microservices-backend",
                   "dev",
                   "lambda"
                 ]
@@ -120,7 +132,7 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/new-express-backend-dev*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/serverless-microservices-backend-dev*:*"
                     }
                   ]
                 },
@@ -131,18 +143,24 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/new-express-backend-dev*:*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/serverless-microservices-backend-dev*:*:*"
                     }
                   ]
                 },
                 {
                   "Effect": "Allow",
                   "Action": [
+                    "lambda:GetLayerVersion"
+                  ],
+                  "Resource": "arn:aws:lambda:ap-south-1:905418375464:layer:common-libraries:*"
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
                     "dynamodb:GetItem",
                     "dynamodb:PutItem",
-                    "dynamodb:UpdateItem",
-                    "dynamodb:Query",
-                    "dynamodb:DeleteItem"
+                    "dynamodb:DeleteItem",
+                    "dynamodb:Query"
                   ],
                   "Resource": [
                     "arn:aws:dynamodb:ap-south-1:905418375464:table/Users",
@@ -165,7 +183,7 @@
           "Fn::Join": [
             "-",
             [
-              "new-express-backend",
+              "serverless-microservices-backend",
               "dev",
               {
                 "Ref": "AWS::Region"
@@ -176,18 +194,34 @@
         }
       }
     },
-    "AppLambdaFunction": {
+    "CommonLibsLambdaLayer": {
+      "Type": "AWS::Lambda::LayerVersion",
+      "Properties": {
+        "Content": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/serverless-microservices-backend/dev/1725720634055-2024-09-07T14:50:34.055Z/commonLibs.zip"
+        },
+        "LayerName": "commonLibs",
+        "Description": "Common libraries for all services (serverless-http, express, aws-sdk, bcryptjs, jsonwebtoken)",
+        "CompatibleRuntimes": [
+          "nodejs18.x"
+        ]
+      }
+    },
+    "AuthServiceLambdaFunction": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
         "Code": {
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/new-express-backend/dev/1725259862260-2024-09-02T06:51:02.260Z/new-express-backend.zip"
+          "S3Key": "serverless/serverless-microservices-backend/dev/1725722182555-2024-09-07T15:16:22.555Z/serverless-microservices-backend.zip"
         },
-        "Handler": "app.handler",
+        "Handler": "authService/authService.handler",
         "Runtime": "nodejs18.x",
-        "FunctionName": "new-express-backend-dev-app",
+        "FunctionName": "serverless-microservices-backend-dev-authService",
         "MemorySize": 1024,
         "Timeout": 6,
         "Environment": {
@@ -200,26 +234,115 @@
             "IamRoleLambdaExecution",
             "Arn"
           ]
-        }
+        },
+        "Layers": [
+          "arn:aws:lambda:ap-south-1:905418375464:layer:common-libraries:3"
+        ]
       },
       "DependsOn": [
-        "AppLogGroup"
+        "AuthServiceLogGroup"
       ]
     },
-    "AppLambdaVersiongWIfjbnz1fwHqoQzfkY6zpBdiIKDSIwjaiKaxvM3w": {
+    "BlogServiceLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/serverless-microservices-backend/dev/1725722182555-2024-09-07T15:16:22.555Z/serverless-microservices-backend.zip"
+        },
+        "Handler": "blogService/blogService.handler",
+        "Runtime": "nodejs18.x",
+        "FunctionName": "serverless-microservices-backend-dev-blogService",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "JWT_SECRET": "abcd1234"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        },
+        "Layers": [
+          "arn:aws:lambda:ap-south-1:905418375464:layer:common-libraries:3"
+        ]
+      },
+      "DependsOn": [
+        "BlogServiceLogGroup"
+      ]
+    },
+    "SpeechServiceLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/serverless-microservices-backend/dev/1725722182555-2024-09-07T15:16:22.555Z/serverless-microservices-backend.zip"
+        },
+        "Handler": "speechService/speechService.handler",
+        "Runtime": "nodejs18.x",
+        "FunctionName": "serverless-microservices-backend-dev-speechService",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "JWT_SECRET": "abcd1234"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        },
+        "Layers": [
+          "arn:aws:lambda:ap-south-1:905418375464:layer:common-libraries:3"
+        ]
+      },
+      "DependsOn": [
+        "SpeechServiceLogGroup"
+      ]
+    },
+    "AuthServiceLambdaVersion3LdAcJags4EqBGWSsqxFLLagpC6Y9Dt3O3wSBdmrwo": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
-          "Ref": "AppLambdaFunction"
+          "Ref": "AuthServiceLambdaFunction"
         },
-        "CodeSha256": "gVUlqv1sE4oS69/ZmitFNBsO03v8Ajsp6W3QCsqHhVM="
+        "CodeSha256": "a3FdWvbNifh0hOE+nXn4P6UGeBvVmdnyxVMFxwq2ooY="
+      }
+    },
+    "BlogServiceLambdaVersionGqNqbUMVIaHHZsOfLrNFFWM8vUc7IIUEpeDY7vFjA": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "BlogServiceLambdaFunction"
+        },
+        "CodeSha256": "a3FdWvbNifh0hOE+nXn4P6UGeBvVmdnyxVMFxwq2ooY="
+      }
+    },
+    "SpeechServiceLambdaVersionAvokcbAAZGTShhUaZoMSYeU7aNaDY1nXH7PLJn7g": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "SpeechServiceLambdaFunction"
+        },
+        "CodeSha256": "a3FdWvbNifh0hOE+nXn4P6UGeBvVmdnyxVMFxwq2ooY="
       }
     },
     "ApiGatewayRestApi": {
       "Type": "AWS::ApiGateway::RestApi",
       "Properties": {
-        "Name": "dev-new-express-backend",
+        "Name": "dev-serverless-microservices-backend",
         "EndpointConfiguration": {
           "Types": [
             "EDGE"
@@ -228,7 +351,7 @@
         "Policy": ""
       }
     },
-    "ApiGatewayResourceProxyVar": {
+    "ApiGatewayResourceRegister": {
       "Type": "AWS::ApiGateway::Resource",
       "Properties": {
         "ParentId": {
@@ -237,13 +360,115 @@
             "RootResourceId"
           ]
         },
-        "PathPart": "{proxy+}",
+        "PathPart": "register",
         "RestApiId": {
           "Ref": "ApiGatewayRestApi"
         }
       }
     },
-    "ApiGatewayMethodProxyVarOptions": {
+    "ApiGatewayResourceLogin": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Fn::GetAtt": [
+            "ApiGatewayRestApi",
+            "RootResourceId"
+          ]
+        },
+        "PathPart": "login",
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayResourceApi": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Fn::GetAtt": [
+            "ApiGatewayRestApi",
+            "RootResourceId"
+          ]
+        },
+        "PathPart": "api",
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayResourceApiSaveDashblog": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Ref": "ApiGatewayResourceApi"
+        },
+        "PathPart": "save-blog",
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayResourceApiGetDashblogs": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Ref": "ApiGatewayResourceApi"
+        },
+        "PathPart": "get-blogs",
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayResourceApiGetDashblog": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Ref": "ApiGatewayResourceApi"
+        },
+        "PathPart": "get-blog",
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayResourceApiGetDashblogBlogidVar": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Ref": "ApiGatewayResourceApiGetDashblog"
+        },
+        "PathPart": "{blogId}",
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayResourceApiDeleteDashblog": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Ref": "ApiGatewayResourceApi"
+        },
+        "PathPart": "delete-blog",
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayResourceApiSpeech": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Ref": "ApiGatewayResourceApi"
+        },
+        "PathPart": "speech",
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayMethodRegisterOptions": {
       "Type": "AWS::ApiGateway::Method",
       "Properties": {
         "AuthorizationType": "NONE",
@@ -271,8 +496,8 @@
               "StatusCode": "200",
               "ResponseParameters": {
                 "method.response.header.Access-Control-Allow-Origin": "'*'",
-                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
-                "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,DELETE,GET,HEAD,PATCH,POST,PUT'"
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization'",
+                "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'"
               },
               "ResponseTemplates": {
                 "application/json": ""
@@ -281,20 +506,290 @@
           ]
         },
         "ResourceId": {
-          "Ref": "ApiGatewayResourceProxyVar"
+          "Ref": "ApiGatewayResourceRegister"
         },
         "RestApiId": {
           "Ref": "ApiGatewayRestApi"
         }
       }
     },
-    "ApiGatewayMethodProxyVarAny": {
+    "ApiGatewayMethodLoginOptions": {
       "Type": "AWS::ApiGateway::Method",
       "Properties": {
-        "HttpMethod": "ANY",
+        "AuthorizationType": "NONE",
+        "HttpMethod": "OPTIONS",
+        "MethodResponses": [
+          {
+            "StatusCode": "200",
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Origin": true,
+              "method.response.header.Access-Control-Allow-Headers": true,
+              "method.response.header.Access-Control-Allow-Methods": true
+            },
+            "ResponseModels": {}
+          }
+        ],
+        "RequestParameters": {},
+        "Integration": {
+          "Type": "MOCK",
+          "RequestTemplates": {
+            "application/json": "{statusCode:200}"
+          },
+          "ContentHandling": "CONVERT_TO_TEXT",
+          "IntegrationResponses": [
+            {
+              "StatusCode": "200",
+              "ResponseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'",
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization'",
+                "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'"
+              },
+              "ResponseTemplates": {
+                "application/json": ""
+              }
+            }
+          ]
+        },
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceLogin"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayMethodApiSaveDashblogOptions": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "AuthorizationType": "NONE",
+        "HttpMethod": "OPTIONS",
+        "MethodResponses": [
+          {
+            "StatusCode": "200",
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Origin": true,
+              "method.response.header.Access-Control-Allow-Headers": true,
+              "method.response.header.Access-Control-Allow-Methods": true
+            },
+            "ResponseModels": {}
+          }
+        ],
+        "RequestParameters": {},
+        "Integration": {
+          "Type": "MOCK",
+          "RequestTemplates": {
+            "application/json": "{statusCode:200}"
+          },
+          "ContentHandling": "CONVERT_TO_TEXT",
+          "IntegrationResponses": [
+            {
+              "StatusCode": "200",
+              "ResponseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'",
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization'",
+                "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'"
+              },
+              "ResponseTemplates": {
+                "application/json": ""
+              }
+            }
+          ]
+        },
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceApiSaveDashblog"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayMethodApiGetDashblogsOptions": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "AuthorizationType": "NONE",
+        "HttpMethod": "OPTIONS",
+        "MethodResponses": [
+          {
+            "StatusCode": "200",
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Origin": true,
+              "method.response.header.Access-Control-Allow-Headers": true,
+              "method.response.header.Access-Control-Allow-Methods": true
+            },
+            "ResponseModels": {}
+          }
+        ],
+        "RequestParameters": {},
+        "Integration": {
+          "Type": "MOCK",
+          "RequestTemplates": {
+            "application/json": "{statusCode:200}"
+          },
+          "ContentHandling": "CONVERT_TO_TEXT",
+          "IntegrationResponses": [
+            {
+              "StatusCode": "200",
+              "ResponseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'",
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization'",
+                "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET'"
+              },
+              "ResponseTemplates": {
+                "application/json": ""
+              }
+            }
+          ]
+        },
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceApiGetDashblogs"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayMethodApiGetDashblogBlogidVarOptions": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "AuthorizationType": "NONE",
+        "HttpMethod": "OPTIONS",
+        "MethodResponses": [
+          {
+            "StatusCode": "200",
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Origin": true,
+              "method.response.header.Access-Control-Allow-Headers": true,
+              "method.response.header.Access-Control-Allow-Methods": true
+            },
+            "ResponseModels": {}
+          }
+        ],
+        "RequestParameters": {},
+        "Integration": {
+          "Type": "MOCK",
+          "RequestTemplates": {
+            "application/json": "{statusCode:200}"
+          },
+          "ContentHandling": "CONVERT_TO_TEXT",
+          "IntegrationResponses": [
+            {
+              "StatusCode": "200",
+              "ResponseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'",
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization'",
+                "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET'"
+              },
+              "ResponseTemplates": {
+                "application/json": ""
+              }
+            }
+          ]
+        },
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceApiGetDashblogBlogidVar"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayMethodApiDeleteDashblogOptions": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "AuthorizationType": "NONE",
+        "HttpMethod": "OPTIONS",
+        "MethodResponses": [
+          {
+            "StatusCode": "200",
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Origin": true,
+              "method.response.header.Access-Control-Allow-Headers": true,
+              "method.response.header.Access-Control-Allow-Methods": true
+            },
+            "ResponseModels": {}
+          }
+        ],
+        "RequestParameters": {},
+        "Integration": {
+          "Type": "MOCK",
+          "RequestTemplates": {
+            "application/json": "{statusCode:200}"
+          },
+          "ContentHandling": "CONVERT_TO_TEXT",
+          "IntegrationResponses": [
+            {
+              "StatusCode": "200",
+              "ResponseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'",
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization'",
+                "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,DELETE'"
+              },
+              "ResponseTemplates": {
+                "application/json": ""
+              }
+            }
+          ]
+        },
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceApiDeleteDashblog"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayMethodApiSpeechOptions": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "AuthorizationType": "NONE",
+        "HttpMethod": "OPTIONS",
+        "MethodResponses": [
+          {
+            "StatusCode": "200",
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Origin": true,
+              "method.response.header.Access-Control-Allow-Headers": true,
+              "method.response.header.Access-Control-Allow-Methods": true
+            },
+            "ResponseModels": {}
+          }
+        ],
+        "RequestParameters": {},
+        "Integration": {
+          "Type": "MOCK",
+          "RequestTemplates": {
+            "application/json": "{statusCode:200}"
+          },
+          "ContentHandling": "CONVERT_TO_TEXT",
+          "IntegrationResponses": [
+            {
+              "StatusCode": "200",
+              "ResponseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'",
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization'",
+                "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'"
+              },
+              "ResponseTemplates": {
+                "application/json": ""
+              }
+            }
+          ]
+        },
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceApiSpeech"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayMethodRegisterPost": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "POST",
         "RequestParameters": {},
         "ResourceId": {
-          "Ref": "ApiGatewayResourceProxyVar"
+          "Ref": "ApiGatewayResourceRegister"
         },
         "RestApiId": {
           "Ref": "ApiGatewayRestApi"
@@ -319,7 +814,7 @@
                 ":lambda:path/2015-03-31/functions/",
                 {
                   "Fn::GetAtt": [
-                    "AppLambdaFunction",
+                    "AuthServiceLambdaFunction",
                     "Arn"
                   ]
                 },
@@ -331,10 +826,286 @@
         "MethodResponses": []
       },
       "DependsOn": [
-        "AppLambdaPermissionApiGateway"
+        "AuthServiceLambdaPermissionApiGateway"
       ]
     },
-    "ApiGatewayDeployment1725259843210": {
+    "ApiGatewayMethodLoginPost": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "POST",
+        "RequestParameters": {},
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceLogin"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        },
+        "ApiKeyRequired": false,
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "AuthServiceLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        },
+        "MethodResponses": []
+      },
+      "DependsOn": [
+        "AuthServiceLambdaPermissionApiGateway"
+      ]
+    },
+    "ApiGatewayMethodApiSaveDashblogPost": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "POST",
+        "RequestParameters": {},
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceApiSaveDashblog"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        },
+        "ApiKeyRequired": false,
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "BlogServiceLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        },
+        "MethodResponses": []
+      },
+      "DependsOn": [
+        "BlogServiceLambdaPermissionApiGateway"
+      ]
+    },
+    "ApiGatewayMethodApiGetDashblogsGet": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "GET",
+        "RequestParameters": {},
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceApiGetDashblogs"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        },
+        "ApiKeyRequired": false,
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "BlogServiceLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        },
+        "MethodResponses": []
+      },
+      "DependsOn": [
+        "BlogServiceLambdaPermissionApiGateway"
+      ]
+    },
+    "ApiGatewayMethodApiGetDashblogBlogidVarGet": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "GET",
+        "RequestParameters": {},
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceApiGetDashblogBlogidVar"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        },
+        "ApiKeyRequired": false,
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "BlogServiceLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        },
+        "MethodResponses": []
+      },
+      "DependsOn": [
+        "BlogServiceLambdaPermissionApiGateway"
+      ]
+    },
+    "ApiGatewayMethodApiDeleteDashblogDelete": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "DELETE",
+        "RequestParameters": {},
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceApiDeleteDashblog"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        },
+        "ApiKeyRequired": false,
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "BlogServiceLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        },
+        "MethodResponses": []
+      },
+      "DependsOn": [
+        "BlogServiceLambdaPermissionApiGateway"
+      ]
+    },
+    "ApiGatewayMethodApiSpeechPost": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "POST",
+        "RequestParameters": {},
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceApiSpeech"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        },
+        "ApiKeyRequired": false,
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "SpeechServiceLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        },
+        "MethodResponses": []
+      },
+      "DependsOn": [
+        "SpeechServiceLambdaPermissionApiGateway"
+      ]
+    },
+    "ApiGatewayDeployment1725722176377": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -343,16 +1114,102 @@
         "StageName": "dev"
       },
       "DependsOn": [
-        "ApiGatewayMethodProxyVarOptions",
-        "ApiGatewayMethodProxyVarAny"
+        "ApiGatewayMethodRegisterOptions",
+        "ApiGatewayMethodLoginOptions",
+        "ApiGatewayMethodApiSaveDashblogOptions",
+        "ApiGatewayMethodApiGetDashblogsOptions",
+        "ApiGatewayMethodApiGetDashblogBlogidVarOptions",
+        "ApiGatewayMethodApiDeleteDashblogOptions",
+        "ApiGatewayMethodApiSpeechOptions",
+        "ApiGatewayMethodRegisterPost",
+        "ApiGatewayMethodLoginPost",
+        "ApiGatewayMethodApiSaveDashblogPost",
+        "ApiGatewayMethodApiGetDashblogsGet",
+        "ApiGatewayMethodApiGetDashblogBlogidVarGet",
+        "ApiGatewayMethodApiDeleteDashblogDelete",
+        "ApiGatewayMethodApiSpeechPost"
       ]
     },
-    "AppLambdaPermissionApiGateway": {
+    "AuthServiceLambdaPermissionApiGateway": {
       "Type": "AWS::Lambda::Permission",
       "Properties": {
         "FunctionName": {
           "Fn::GetAtt": [
-            "AppLambdaFunction",
+            "AuthServiceLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "/*/*"
+            ]
+          ]
+        }
+      }
+    },
+    "BlogServiceLambdaPermissionApiGateway": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "BlogServiceLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "/*/*"
+            ]
+          ]
+        }
+      }
+    },
+    "SpeechServiceLambdaPermissionApiGateway": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "SpeechServiceLambdaFunction",
             "Arn"
           ]
         },
@@ -391,16 +1248,57 @@
         "Ref": "ServerlessDeploymentBucket"
       },
       "Export": {
-        "Name": "sls-new-express-backend-dev-ServerlessDeploymentBucketName"
+        "Name": "sls-serverless-microservices-backend-dev-ServerlessDeploymentBucketName"
       }
     },
-    "AppLambdaFunctionQualifiedArn": {
-      "Description": "Current Lambda function version",
+    "CommonLibsLambdaLayerQualifiedArn": {
+      "Description": "Current Lambda layer version",
       "Value": {
-        "Ref": "AppLambdaVersiongWIfjbnz1fwHqoQzfkY6zpBdiIKDSIwjaiKaxvM3w"
+        "Ref": "CommonLibsLambdaLayer"
       },
       "Export": {
-        "Name": "sls-new-express-backend-dev-AppLambdaFunctionQualifiedArn"
+        "Name": "sls-serverless-microservices-backend-dev-CommonLibsLambdaLayerQualifiedArn"
+      }
+    },
+    "CommonLibsLambdaLayerHash": {
+      "Description": "Current Lambda layer hash",
+      "Value": "94fa485837a4ea19a7c0ada08ca97847a823dec7",
+      "Export": {
+        "Name": "sls-serverless-microservices-backend-dev-CommonLibsLambdaLayerHash"
+      }
+    },
+    "CommonLibsLambdaLayerS3Key": {
+      "Description": "Current Lambda layer S3Key",
+      "Value": "serverless/serverless-microservices-backend/dev/1725720634055-2024-09-07T14:50:34.055Z/commonLibs.zip",
+      "Export": {
+        "Name": "sls-serverless-microservices-backend-dev-CommonLibsLambdaLayerS3Key"
+      }
+    },
+    "AuthServiceLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "AuthServiceLambdaVersion3LdAcJags4EqBGWSsqxFLLagpC6Y9Dt3O3wSBdmrwo"
+      },
+      "Export": {
+        "Name": "sls-serverless-microservices-backend-dev-AuthServiceLambdaFunctionQualifiedArn"
+      }
+    },
+    "BlogServiceLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "BlogServiceLambdaVersionGqNqbUMVIaHHZsOfLrNFFWM8vUc7IIUEpeDY7vFjA"
+      },
+      "Export": {
+        "Name": "sls-serverless-microservices-backend-dev-BlogServiceLambdaFunctionQualifiedArn"
+      }
+    },
+    "SpeechServiceLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "SpeechServiceLambdaVersionAvokcbAAZGTShhUaZoMSYeU7aNaDY1nXH7PLJn7g"
+      },
+      "Export": {
+        "Name": "sls-serverless-microservices-backend-dev-SpeechServiceLambdaFunctionQualifiedArn"
       }
     },
     "ServiceEndpoint": {
@@ -426,7 +1324,7 @@
         ]
       },
       "Export": {
-        "Name": "sls-new-express-backend-dev-ServiceEndpoint"
+        "Name": "sls-serverless-microservices-backend-dev-ServiceEndpoint"
       }
     }
   }

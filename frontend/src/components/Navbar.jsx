@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import logo from '../assets/logo.png'; // Importing the logo from the assets folder
 
 function Navbar({ isLoggedIn, onLogout }) {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation(); // Hook to get the current route
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -12,16 +14,19 @@ function Navbar({ isLoggedIn, onLogout }) {
   const handleLogout = () => {
     onLogout();
     navigate('/login'); // Redirect to login page after logout
-    console.log('logged out');
   };
 
+  // Function to check if a route is active
+  const isActiveLink = (path) => location.pathname === path;
+
   return (
-    <nav className="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 bg-opacity-80 p-4 sticky top-0 z-10 shadow-md backdrop-blur-lg">
+    <nav className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-opacity-80 p-4 sticky top-0 z-10 shadow-lg backdrop-blur-lg">
       <div className="container mx-auto flex justify-between items-center">
-        <Link to="/" className="text-white font-bold text-xl">
-          <span className='text-xl font-semibold'>Polly Blog</span>
+        <Link to="/" className="flex items-center">
+          <img src={logo} alt="Logo" className="absolute mt-0.5 h-16 w-16 mr-3" /> {/* Logo */}
+          {/* <span className="text-white font-bold text-2xl">Polly Blog</span> */}
         </Link>
-        <div className="block lg:hidden">
+        <div className="lg:hidden">
           <button onClick={toggleMenu} className="text-white focus:outline-none">
             <svg className="h-6 w-6 fill-current" viewBox="0 0 24 24">
               {isOpen ? (
@@ -41,23 +46,28 @@ function Navbar({ isLoggedIn, onLogout }) {
           </button>
         </div>
         <div className={`lg:flex lg:items-center ${isOpen ? 'block' : 'hidden'} lg:block`}>
-          <div className="flex flex-col lg:flex-row lg:space-x-4 lg:ml-auto">
+          <div className="flex flex-col lg:flex-row lg:space-x-6 lg:ml-auto">
             <Link
               to="/text-to-speech"
-              className="text-gray-300 hover:text-white block lg:inline-block mt-4 lg:mt-0 transition duration-300 ease-in-out transform hover:scale-105"
+              className={`${
+                isActiveLink('/text-to-speech') ? 'text-white font-bold' : 'text-gray-200'
+              } hover:text-white block lg:inline-block mt-4 lg:mt-0 transition-transform transform hover:scale-105`}
             >
-              Text to Speech
+              Narrate Blog
             </Link>
             <Link
               to="/saved-blogs"
-              className="text-gray-300 hover:text-white block lg:inline-block mt-4 lg:mt-0 transition duration-300 ease-in-out transform hover:scale-105"
+              className={`${
+                isActiveLink('/saved-blogs') ? 'text-white font-bold' : 'text-gray-200'
+              } hover:text-white block lg:inline-block mt-4 lg:mt-0 transition-transform transform hover:scale-105`}
             >
               Saved Blogs
             </Link>
+
             {isLoggedIn ? (
               <button
                 onClick={handleLogout}
-                className="text-gray-300 hover:text-white block lg:inline-block mt-4 lg:mt-0 transition duration-300 ease-in-out transform hover:scale-105"
+                className="text-gray-200 hover:text-white block lg:inline-block mt-4 lg:mt-0 transition-transform transform hover:scale-105"
               >
                 Logout
               </button>
@@ -65,13 +75,17 @@ function Navbar({ isLoggedIn, onLogout }) {
               <>
                 <Link
                   to="/login"
-                  className="text-gray-300 hover:text-white block lg:inline-block mt-4 lg:mt-0 transition duration-300 ease-in-out transform hover:scale-105"
+                  className={`${
+                    isActiveLink('/login') ? 'text-white font-bold' : 'text-gray-200'
+                  } hover:text-white block lg:inline-block mt-4 lg:mt-0 transition-transform transform hover:scale-105`}
                 >
                   Login
                 </Link>
                 <Link
                   to="/register"
-                  className="text-gray-300 hover:text-white block lg:inline-block mt-4 lg:mt-0 transition duration-300 ease-in-out transform hover:scale-105"
+                  className={`${
+                    isActiveLink('/register') ? 'text-white font-bold' : 'text-gray-200'
+                  } hover:text-white block lg:inline-block mt-4 lg:mt-0 transition-transform transform hover:scale-105`}
                 >
                   Register
                 </Link>
