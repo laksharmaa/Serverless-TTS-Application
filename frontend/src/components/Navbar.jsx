@@ -20,21 +20,25 @@ function Navbar({ isLoggedIn, onLogout }) {
   const isActiveLink = (path) => location.pathname === path;
 
   return (
-    <header className="sticky inset-0 z-50  border-b border-slate-100 bg-opacity-50 backdrop-blur-lg">
-      <nav className="flex mx-auto max-w-6xl gap-8 px-6 transition-all duration-200 ease-in-out lg:px-12 ">
+    <header className="sticky inset-0 z-50 border-b border-slate-100 bg-opacity-50 backdrop-blur-lg h-16"> {/* Set navbar height */}
+      <nav className="flex max-w-7xl mx-auto gap-8 px-6 transition-all duration-200 ease-in-out lg:px-12 py-0 h-full">
         {/* Logo */}
-        <div className="absolutex  items-center">
-          <Link to="/">
-            <img src={logo} alt="Logo" className="h-16 w-16" />
+        <div className="items-center h-full">
+          <Link to="/" className="h-full flex items-center"> {/* Center logo vertically */}
+            <img 
+              src={logo} 
+              alt="Logo" 
+              className="max-h-28 object-contain"  // Constrain the height and maintain aspect ratio
+            />
           </Link>
         </div>
 
         {/* Navigation Links */}
         <ul className="hidden items-center justify-center gap-6 md:flex">
-          <li className={`pt-1.5 font-medium ${isActiveLink('/text-to-speech') ? 'text-pink-400 font-bold' : 'text-white-700'}`}>
+          <li className={`font-medium ${isActiveLink('/text-to-speech') ? 'text-pink-400 font-bold' : 'text-white-700'}`}>
             <Link to="/text-to-speech">Narrate Blog</Link>
           </li>
-          <li className={`pt-1.5 font-medium ${isActiveLink('/saved-blogs') ? 'text-pink-400   font-bold' : 'text-white-700'}`}>
+          <li className={`font-medium ${isActiveLink('/saved-blogs') ? 'text-pink-400 font-bold' : 'text-white-700'}`}>
             <Link to="/saved-blogs">Saved Blogs</Link>
           </li>
         </ul>
@@ -47,7 +51,7 @@ function Navbar({ isLoggedIn, onLogout }) {
           {isLoggedIn ? (
             <button
               onClick={handleLogout}
-              className="text-white-700 hover:text-black font-medium"
+              className="text-white-700 hover:text-pink-500 font-medium"
             >
               Logout
             </button>
@@ -123,10 +127,10 @@ function Navbar({ isLoggedIn, onLogout }) {
             </Link>
             <Link
               to="/register"
-              className="block bg-green-600 text-white rounded-md px-3 py-2 text-center"
+              className="backdrop-filter backdrop-blur-lg p-8 shadow-md block bg-indigo-500 text-white rounded-md px-3 py-2 text-center"
               onClick={toggleMenu}
             >
-              Sign up for free
+              Sign up
             </Link>
           </>
         )}

@@ -49,7 +49,7 @@ function TextToSpeech() {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ text, voiceId }), 
+        body: JSON.stringify({ text, voiceId }),
       });
 
       if (response.ok) {
@@ -105,14 +105,13 @@ function TextToSpeech() {
 
   return (
     <div className="min-h-full flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-900 px-4">
-      <h1 className="text-xl text-gray-900 dark:text-white text-center m-2">Convert a Blog into Podcast</h1>
-      
+      <h1 className="text-xl text-gray-900 dark:text-white text-center m-2">Narrate your blog</h1>
+
       {/* Notification card */}
       {notification && (
         <div
-          className={`p-2 rounded-lg mb-4 transition-all ${
-            notificationType === 'success' ? 'bg-green-200 text-green-800' : 'bg-red-200 text-red-800'
-          }`}
+          className={`p-2 rounded-lg mb-4 transition-all ${notificationType === 'success' ? 'bg-green-200 text-green-800' : 'bg-red-200 text-red-800'
+            }`}
         >
           {notification}
         </div>
@@ -121,7 +120,7 @@ function TextToSpeech() {
       {/* Message for success or errors */}
       {message && <p className="text-red-500 mb-4">{message}</p>}
 
-      <form onSubmit={handleSubmit} className="w-full h-full flex flex-col space-y-6">
+      <form onSubmit={handleSubmit} className="w-full max-w-6xl mx-auto flex flex-col space-y-6">
         <textarea
           id="text"
           value={text}
@@ -129,7 +128,7 @@ function TextToSpeech() {
           className="w-full h-[70vh] p-4 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 focus:border-transparent resize-none"
           placeholder="Paste the text of any blog post..."
         />
-       
+
         <div className="w-full flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0 md:space-x-4">
           <select
             id="voiceId"
@@ -144,9 +143,11 @@ function TextToSpeech() {
             <option value="Kendra">Kendra (English-US)</option>
           </select>
 
-          <label className="text-left text-gray-600 dark:text-gray-400">
-            {wordCount} {wordCount === 1 ? 'word' : 'words'}
-          </label>
+          {audioUrl && (
+            <div className=" w-full md:w-auto flex-grow">
+              <audio controls src={audioUrl} className="w-full rounded-lg shadow-sm" />
+            </div>
+          )}
 
           <div className="w-full md:w-auto flex justify-between md:justify-start space-x-2">
             <button
@@ -166,11 +167,6 @@ function TextToSpeech() {
         </div>
       </form>
 
-      {audioUrl && (
-        <div className="mt-8 text-center w-full">
-          <audio controls src={audioUrl} className="w-full rounded-lg shadow-sm" />
-        </div>
-      )}
     </div>
   );
 }
