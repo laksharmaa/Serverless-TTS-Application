@@ -58,7 +58,7 @@ function Navbar({ isLoggedIn, onLogout }) {
           ) : (
             <>
               <Link to="/login" className={`font-medium ${isActiveLink('/login') ? 'rounded-md bg-gradient-to-br from-blue-600 to-blue-400 px-3 py-1.5 font-medium text-white shadow-md shadow-blue-400/50 transition-transform duration-200 ease-in-out hover:scale-105"' : 'text-white-700'}`}>
-                Sign in
+                Login
               </Link>
               <Link
                 to="/register"
@@ -123,7 +123,7 @@ function Navbar({ isLoggedIn, onLogout }) {
               className="block text-gray-700 font-medium"
               onClick={toggleMenu}
             >
-              Sign in
+              Login
             </Link>
             <Link
               to="/register"

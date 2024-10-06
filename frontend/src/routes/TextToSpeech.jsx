@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-function TextToSpeech() {
+function TextToSpeech({ blogId = null }) { // Accept blogId as a prop (optional)
   const [text, setText] = useState('');
   const [audioUrl, setAudioUrl] = useState(null);
   const [voiceId, setVoiceId] = useState('Joanna'); // Default voice
@@ -49,12 +49,12 @@ function TextToSpeech() {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ text, voiceId }),
+        body: JSON.stringify({ text, voiceId, blogId }), // Send blogId if available
       });
 
       if (response.ok) {
-        const { audioUrl } = await response.json();
-        setAudioUrl(audioUrl);
+        const { audioUrl } = await response.json();  // Receive the signed URL
+        setAudioUrl(audioUrl);  // Set the audio URL to the signed S3 URL
         showNotification('Text successfully converted to speech!', 'success');
       } else {
         const errorData = await response.json();
