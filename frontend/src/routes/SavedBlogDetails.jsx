@@ -6,19 +6,19 @@ function SavedBlogDetails() {
   const blog = state?.blog;
   const [selectedVoice, setSelectedVoice] = useState('Joanna');
   const [audioUrl, setAudioUrl] = useState(null);
-  const [isConverting, setIsConverting] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [isConverting, setIsConverting] = useState(false); // Conversion loader
+  const [loading, setLoading] = useState(true); // Initial loading state
   const [errorMessage, setErrorMessage] = useState(null);
 
   useEffect(() => {
-    if (blog) setLoading(false);
+    if (blog) setLoading(false); // When the blog is available, stop loading
   }, [blog]);
 
   const handleListen = async () => {
     if (!blog) return;
 
-    setIsConverting(true);
-    setErrorMessage(null);
+    setIsConverting(true); // Set converting state
+    setErrorMessage(null); // Reset error message
 
     try {
       const token = localStorage.getItem('token');
@@ -35,11 +35,7 @@ function SavedBlogDetails() {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          text: blog.blogContent,
-          voiceId: selectedVoice,
-          blogId: blog.blogId,  // Passing the blog ID to check if audio already exists
-        }),
+        body: JSON.stringify({ text: blog.blogContent, voiceId: selectedVoice, blogId: blog.blogId }),
       });
 
       if (response.ok) {
@@ -52,9 +48,18 @@ function SavedBlogDetails() {
     } catch (error) {
       setErrorMessage('An error occurred while generating speech.');
     } finally {
-      setIsConverting(false);
+      setIsConverting(false); // Stop converting loader
     }
   };
+
+  // Skeleton loader component definition
+  const SkeletonLoader = () => (
+    <div className="animate-pulse">
+      <div className="h-6 bg-gray-300 dark:bg-gray-600 rounded mb-4"></div>
+      <div className="h-4 bg-gray-300 dark:bg-gray-600 rounded mb-4"></div>
+      <div className="h-4 bg-gray-300 dark:bg-gray-600 rounded mb-4"></div>
+    </div>
+  );
 
   if (loading) {
     return <SkeletonLoader />;
