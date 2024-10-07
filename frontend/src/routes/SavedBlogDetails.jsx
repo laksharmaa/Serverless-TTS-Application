@@ -16,10 +16,9 @@ function SavedBlogDetails() {
 
   const handleListen = async () => {
     if (!blog) return;
-
-    setIsConverting(true); // Set converting state
-    setErrorMessage(null); // Reset error message
-
+    setIsConverting(true); 
+    setErrorMessage(null); // Reset error message before request
+  
     try {
       const token = localStorage.getItem('token');
       if (!token) {
@@ -27,7 +26,7 @@ function SavedBlogDetails() {
         setIsConverting(false);
         return;
       }
-
+  
       const url = import.meta.env.VITE_API_BASE_URL;
       const response = await fetch(`${url}/api/speech`, {
         method: 'POST',
@@ -35,12 +34,16 @@ function SavedBlogDetails() {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ text: blog.blogContent, voiceId: selectedVoice, blogId: blog.blogId }),
+        body: JSON.stringify({
+          text: blog.blogContent,
+          voiceId: selectedVoice,
+          blogId: blog.blogId,
+        }),
       });
-
+  
       if (response.ok) {
-        const data = await response.json();
-        setAudioUrl(data.audioUrl);
+        const { audioUrl } = await response.json();
+        setAudioUrl(audioUrl);
       } else {
         const errorData = await response.json();
         setErrorMessage(errorData.error || 'An error occurred while generating speech.');
@@ -48,9 +51,10 @@ function SavedBlogDetails() {
     } catch (error) {
       setErrorMessage('An error occurred while generating speech.');
     } finally {
-      setIsConverting(false); // Stop converting loader
+      setIsConverting(false); 
     }
   };
+  
 
   // Skeleton loader component definition
   const SkeletonLoader = () => (

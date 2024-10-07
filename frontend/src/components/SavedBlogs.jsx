@@ -47,19 +47,13 @@ function SavedBlogs() {
 
   const handleDeleteBlog = async (blogId) => {
     const token = localStorage.getItem('token');
-
-    if (!token) {
-      setShowLoginPrompt(true); // Show login prompt if user is not logged in
+    const username = JSON.parse(localStorage.getItem('username'));
+  
+    if (!token || !username) {
+      setShowLoginPrompt(true); 
       return;
     }
-
-    const username = blogs[0]?.username;
-
-    if (!username) {
-      alert('Username not found.');
-      return;
-    }
-
+  
     try {
       const url = import.meta.env.VITE_API_BASE_URL;
       const response = await fetch(`${url}/api/delete-blog`, {
@@ -70,17 +64,45 @@ function SavedBlogs() {
         },
         body: JSON.stringify({ username, blogId }),
       });
+      
+      const handleDeleteBlog = async (blogId) => {
+  const token = localStorage.getItem('token');
+  const username = JSON.parse(localStorage.getItem('username'));
 
-      if (response.ok) {
-        setBlogs((prevBlogs) => prevBlogs.filter((blog) => blog.blogId !== blogId));
-      } else {
-        const errorData = await response.json();
-        alert(errorData.error || 'An error occurred while deleting the blog.');
-      }
+  if (!token || !username) {
+    setShowLoginPrompt(true); 
+    return;
+  }
+
+  try {
+    const url = import.meta.env.VITE_API_BASE_URL;
+    const response = await fetch(`${url}/api/delete-blog`, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ username, blogId }),
+    });
+
+    if (response.ok) {
+      setBlogs((prevBlogs) => prevBlogs.filter((blog) => blog.blogId !== blogId));
+    } else {
+      const errorData = await response.json();
+      alert(errorData.error || 'An error occurred while deleting the blog.');
+    }
+    
+  } catch (error) {
+    alert('An error occurred while deleting the blog.');
+  }
+};
+
+
     } catch (error) {
       alert('An error occurred while deleting the blog.');
     }
   };
+  
 
   const handleLoginRedirect = () => {
     navigate('/login');

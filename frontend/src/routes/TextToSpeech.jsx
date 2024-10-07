@@ -26,6 +26,8 @@ function TextToSpeech({ blogId = null }) { // Accept blogId as a prop (optional)
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMessage('');
+    setNotification(''); // Reset notification before starting a new request
+    setAudioUrl(null);   // Reset audioUrl
     setIsLoading(true);
 
     const token = localStorage.getItem('token');
@@ -49,12 +51,12 @@ function TextToSpeech({ blogId = null }) { // Accept blogId as a prop (optional)
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ text, voiceId, blogId }), // Send blogId if available
+        body: JSON.stringify({ text, voiceId, blogId }),
       });
 
       if (response.ok) {
-        const { audioUrl } = await response.json();  // Receive the signed URL
-        setAudioUrl(audioUrl);  // Set the audio URL to the signed S3 URL
+        const { audioUrl } = await response.json();
+        setAudioUrl(audioUrl);
         showNotification('Text successfully converted to speech!', 'success');
       } else {
         const errorData = await response.json();
@@ -66,6 +68,7 @@ function TextToSpeech({ blogId = null }) { // Accept blogId as a prop (optional)
       setIsLoading(false);
     }
   };
+
 
   const handleSaveBlog = async () => {
     setMessage('');
