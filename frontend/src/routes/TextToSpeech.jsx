@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
+import { v4 as uuidv4 } from 'uuid'; // Import UUID for generating unique blogId
 
-function TextToSpeech({ blogId = null }) { // Accept blogId as a prop (optional)
+function TextToSpeech() { 
   const [text, setText] = useState('');
   const [audioUrl, setAudioUrl] = useState(null);
   const [voiceId, setVoiceId] = useState('Joanna'); // Default voice
@@ -44,6 +45,7 @@ function TextToSpeech({ blogId = null }) { // Accept blogId as a prop (optional)
     }
 
     try {
+      const blogId = uuidv4(); // Generate a unique blogId for the request
       const url = import.meta.env.VITE_API_BASE_URL;
       const response = await fetch(`${url}/api/speech`, {
         method: 'POST',
@@ -51,7 +53,7 @@ function TextToSpeech({ blogId = null }) { // Accept blogId as a prop (optional)
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ text, voiceId, blogId }), // Ensure all values are being passed
+        body: JSON.stringify({ text, voiceId, blogId }), // Pass generated blogId here
       });
 
       if (response.ok) {
