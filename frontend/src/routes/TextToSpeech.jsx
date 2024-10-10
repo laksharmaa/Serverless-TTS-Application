@@ -51,7 +51,7 @@ function TextToSpeech({ blogId = null }) { // Accept blogId as a prop (optional)
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ text, voiceId, blogId }),
+        body: JSON.stringify({ text, voiceId, blogId }), // Ensure all values are being passed
       });
 
       if (response.ok) {
@@ -68,7 +68,6 @@ function TextToSpeech({ blogId = null }) { // Accept blogId as a prop (optional)
       setIsLoading(false);
     }
   };
-
 
   const handleSaveBlog = async () => {
     setMessage('');
@@ -169,7 +168,6 @@ function TextToSpeech({ blogId = null }) { // Accept blogId as a prop (optional)
           </div>
         </div>
       </form>
-
     </div>
   );
 }
