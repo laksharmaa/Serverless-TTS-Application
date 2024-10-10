@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { v4 as uuidv4 } from 'uuid'; // Import UUID for generating unique blogId
+import sha256 from 'crypto-js/sha256'; // Import the hashing library
 
 function TextToSpeech() { 
   const [text, setText] = useState('');
@@ -45,7 +45,9 @@ function TextToSpeech() {
     }
 
     try {
-      const blogId = uuidv4(); // Generate a unique blogId for the request
+      // Generate a consistent hash from the text and voiceId
+      const blogId = sha256(`${text}-${voiceId}`).toString(); // Create a unique and consistent hash
+
       const url = import.meta.env.VITE_API_BASE_URL;
       const response = await fetch(`${url}/api/speech`, {
         method: 'POST',
@@ -53,7 +55,7 @@ function TextToSpeech() {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ text, voiceId, blogId }), // Pass generated blogId here
+        body: JSON.stringify({ text, voiceId, blogId }), // Pass the consistent blogId
       });
 
       if (response.ok) {
