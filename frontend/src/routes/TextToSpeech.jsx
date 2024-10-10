@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import sha256 from 'crypto-js/sha256'; // Import the hashing library
 
-function TextToSpeech() { 
+function TextToSpeech() {
   const [text, setText] = useState('');
   const [audioUrl, setAudioUrl] = useState(null);
   const [voiceId, setVoiceId] = useState('Joanna'); // Default voice
@@ -45,9 +44,6 @@ function TextToSpeech() {
     }
 
     try {
-      // Generate a consistent hash from the text and voiceId
-      const blogId = sha256(`${text}-${voiceId}`).toString(); // Create a unique and consistent hash
-
       const url = import.meta.env.VITE_API_BASE_URL;
       const response = await fetch(`${url}/api/speech`, {
         method: 'POST',
@@ -55,7 +51,7 @@ function TextToSpeech() {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ text, voiceId, blogId }), // Pass the consistent blogId
+        body: JSON.stringify({ text, voiceId }), // No need to pass blogId
       });
 
       if (response.ok) {
