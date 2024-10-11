@@ -1,7 +1,7 @@
 {
   "D:\\Dev\\Serverless-TTS-Test\\tts-backend": {
     "versionSfCore": null,
-    "versionFramework": "4.2.5",
+    "versionFramework": "4.4.5",
     "isWithinCompose": false,
     "isCompose": false,
     "composeOrgName": null,
@@ -12,13 +12,15 @@
     "servicePath": "D:\\Dev\\Serverless-TTS-Test\\tts-backend",
     "serviceConfigFileName": "serverless.yml",
     "service": {
+      "org": "laksharmaa",
       "service": "serverless-microservices-backend",
       "provider": {
         "name": "aws",
         "runtime": "nodejs18.x",
         "region": "ap-south-1",
         "environment": {
-          "JWT_SECRET": "<REDACTED>"
+          "JWT_SECRET": "<REDACTED>",
+          "S3_BUCKET_NAME": "polly-audiofiles-bucket"
         },
         "iamRoleStatements": [
           {
@@ -47,6 +49,16 @@
               "polly:SynthesizeSpeech"
             ],
             "Resource": "*"
+          },
+          {
+            "Effect": "Allow",
+            "Action": [
+              "s3:PutObject",
+              "s3:GetObject",
+              "s3:GetObjectAttributes",
+              "s3:ListBucket"
+            ],
+            "Resource": "arn:aws:s3:::polly-audiofiles-bucket/*"
           }
         ],
         "stage": "dev",
@@ -226,6 +238,16 @@
                             "polly:SynthesizeSpeech"
                           ],
                           "Resource": "*"
+                        },
+                        {
+                          "Effect": "Allow",
+                          "Action": [
+                            "s3:PutObject",
+                            "s3:GetObject",
+                            "s3:GetObjectAttributes",
+                            "s3:ListBucket"
+                          ],
+                          "Resource": "arn:aws:s3:::polly-audiofiles-bucket/*"
                         }
                       ]
                     }
@@ -254,7 +276,7 @@
                   "S3Bucket": {
                     "Ref": "ServerlessDeploymentBucket"
                   },
-                  "S3Key": "serverless/serverless-microservices-backend/dev/1725720634055-2024-09-07T14:50:34.055Z/commonLibs.zip"
+                  "S3Key": "serverless/serverless-microservices-backend/dev/1728311118031-2024-10-07T14:25:18.031Z/commonLibs.zip"
                 },
                 "LayerName": "commonLibs",
                 "Description": "Common libraries for all services (serverless-http, express, aws-sdk, bcryptjs, jsonwebtoken)",
@@ -270,7 +292,7 @@
                   "S3Bucket": {
                     "Ref": "ServerlessDeploymentBucket"
                   },
-                  "S3Key": "serverless/serverless-microservices-backend/dev/1725722182555-2024-09-07T15:16:22.555Z/serverless-microservices-backend.zip"
+                  "S3Key": "serverless/serverless-microservices-backend/dev/1728555895785-2024-10-10T10:24:55.785Z/serverless-microservices-backend.zip"
                 },
                 "Handler": "authService/authService.handler",
                 "Runtime": "nodejs18.x",
@@ -279,7 +301,8 @@
                 "Timeout": 6,
                 "Environment": {
                   "Variables": {
-                    "JWT_SECRET": "<REDACTED>"
+                    "JWT_SECRET": "<REDACTED>",
+                    "S3_BUCKET_NAME": "polly-audiofiles-bucket"
                   }
                 },
                 "Role": {
@@ -303,7 +326,7 @@
                   "S3Bucket": {
                     "Ref": "ServerlessDeploymentBucket"
                   },
-                  "S3Key": "serverless/serverless-microservices-backend/dev/1725722182555-2024-09-07T15:16:22.555Z/serverless-microservices-backend.zip"
+                  "S3Key": "serverless/serverless-microservices-backend/dev/1728555895785-2024-10-10T10:24:55.785Z/serverless-microservices-backend.zip"
                 },
                 "Handler": "blogService/blogService.handler",
                 "Runtime": "nodejs18.x",
@@ -312,7 +335,8 @@
                 "Timeout": 6,
                 "Environment": {
                   "Variables": {
-                    "JWT_SECRET": "<REDACTED>"
+                    "JWT_SECRET": "<REDACTED>",
+                    "S3_BUCKET_NAME": "polly-audiofiles-bucket"
                   }
                 },
                 "Role": {
@@ -336,7 +360,7 @@
                   "S3Bucket": {
                     "Ref": "ServerlessDeploymentBucket"
                   },
-                  "S3Key": "serverless/serverless-microservices-backend/dev/1725722182555-2024-09-07T15:16:22.555Z/serverless-microservices-backend.zip"
+                  "S3Key": "serverless/serverless-microservices-backend/dev/1728555895785-2024-10-10T10:24:55.785Z/serverless-microservices-backend.zip"
                 },
                 "Handler": "speechService/speechService.handler",
                 "Runtime": "nodejs18.x",
@@ -345,7 +369,8 @@
                 "Timeout": 6,
                 "Environment": {
                   "Variables": {
-                    "JWT_SECRET": "<REDACTED>"
+                    "JWT_SECRET": "<REDACTED>",
+                    "S3_BUCKET_NAME": "polly-audiofiles-bucket"
                   }
                 },
                 "Role": {
@@ -362,34 +387,34 @@
                 "SpeechServiceLogGroup"
               ]
             },
-            "AuthServiceLambdaVersion3LdAcJags4EqBGWSsqxFLLagpC6Y9Dt3O3wSBdmrwo": {
+            "AuthServiceLambdaVersionIskx8EQkDzT3ciSp5uDRFtgVpNYvgtiCqK0cWHEXALM": {
               "Type": "AWS::Lambda::Version",
               "DeletionPolicy": "Retain",
               "Properties": {
                 "FunctionName": {
                   "Ref": "AuthServiceLambdaFunction"
                 },
-                "CodeSha256": "a3FdWvbNifh0hOE+nXn4P6UGeBvVmdnyxVMFxwq2ooY="
+                "CodeSha256": "pxSx3bgXixu3HpjvPng6GdHqAD9X/BJTLcctZ7ERxHc="
               }
             },
-            "BlogServiceLambdaVersionGqNqbUMVIaHHZsOfLrNFFWM8vUc7IIUEpeDY7vFjA": {
+            "BlogServiceLambdaVersionubUU4EtDBZpkpA8t86dollTVAELOEueEqOnJb7JRTm0": {
               "Type": "AWS::Lambda::Version",
               "DeletionPolicy": "Retain",
               "Properties": {
                 "FunctionName": {
                   "Ref": "BlogServiceLambdaFunction"
                 },
-                "CodeSha256": "a3FdWvbNifh0hOE+nXn4P6UGeBvVmdnyxVMFxwq2ooY="
+                "CodeSha256": "pxSx3bgXixu3HpjvPng6GdHqAD9X/BJTLcctZ7ERxHc="
               }
             },
-            "SpeechServiceLambdaVersionAvokcbAAZGTShhUaZoMSYeU7aNaDY1nXH7PLJn7g": {
+            "SpeechServiceLambdaVersionDA2Us9Zga0P4sK5vzVTxCK9K17Cq4Eein1ivGd5BSJM": {
               "Type": "AWS::Lambda::Version",
               "DeletionPolicy": "Retain",
               "Properties": {
                 "FunctionName": {
                   "Ref": "SpeechServiceLambdaFunction"
                 },
-                "CodeSha256": "a3FdWvbNifh0hOE+nXn4P6UGeBvVmdnyxVMFxwq2ooY="
+                "CodeSha256": "pxSx3bgXixu3HpjvPng6GdHqAD9X/BJTLcctZ7ERxHc="
               }
             },
             "ApiGatewayRestApi": {
@@ -1158,7 +1183,7 @@
                 "SpeechServiceLambdaPermissionApiGateway"
               ]
             },
-            "ApiGatewayDeployment1725722176377": {
+            "ApiGatewayDeployment1728555888625": {
               "Type": "AWS::ApiGateway::Deployment",
               "Properties": {
                 "RestApiId": {
@@ -1315,14 +1340,14 @@
             },
             "CommonLibsLambdaLayerHash": {
               "Description": "Current Lambda layer hash",
-              "Value": "94fa485837a4ea19a7c0ada08ca97847a823dec7",
+              "Value": "1cf8abec94d7523544aa8fa883c1df033bd3e3c7",
               "Export": {
                 "Name": "sls-serverless-microservices-backend-dev-CommonLibsLambdaLayerHash"
               }
             },
             "CommonLibsLambdaLayerS3Key": {
               "Description": "Current Lambda layer S3Key",
-              "Value": "serverless/serverless-microservices-backend/dev/1725720634055-2024-09-07T14:50:34.055Z/commonLibs.zip",
+              "Value": "serverless/serverless-microservices-backend/dev/1728311118031-2024-10-07T14:25:18.031Z/commonLibs.zip",
               "Export": {
                 "Name": "sls-serverless-microservices-backend-dev-CommonLibsLambdaLayerS3Key"
               }
@@ -1330,7 +1355,7 @@
             "AuthServiceLambdaFunctionQualifiedArn": {
               "Description": "Current Lambda function version",
               "Value": {
-                "Ref": "AuthServiceLambdaVersion3LdAcJags4EqBGWSsqxFLLagpC6Y9Dt3O3wSBdmrwo"
+                "Ref": "AuthServiceLambdaVersionIskx8EQkDzT3ciSp5uDRFtgVpNYvgtiCqK0cWHEXALM"
               },
               "Export": {
                 "Name": "sls-serverless-microservices-backend-dev-AuthServiceLambdaFunctionQualifiedArn"
@@ -1339,7 +1364,7 @@
             "BlogServiceLambdaFunctionQualifiedArn": {
               "Description": "Current Lambda function version",
               "Value": {
-                "Ref": "BlogServiceLambdaVersionGqNqbUMVIaHHZsOfLrNFFWM8vUc7IIUEpeDY7vFjA"
+                "Ref": "BlogServiceLambdaVersionubUU4EtDBZpkpA8t86dollTVAELOEueEqOnJb7JRTm0"
               },
               "Export": {
                 "Name": "sls-serverless-microservices-backend-dev-BlogServiceLambdaFunctionQualifiedArn"
@@ -1348,7 +1373,7 @@
             "SpeechServiceLambdaFunctionQualifiedArn": {
               "Description": "Current Lambda function version",
               "Value": {
-                "Ref": "SpeechServiceLambdaVersionAvokcbAAZGTShhUaZoMSYeU7aNaDY1nXH7PLJn7g"
+                "Ref": "SpeechServiceLambdaVersionDA2Us9Zga0P4sK5vzVTxCK9K17Cq4Eein1ivGd5BSJM"
               },
               "Export": {
                 "Name": "sls-serverless-microservices-backend-dev-SpeechServiceLambdaFunctionQualifiedArn"
@@ -1531,7 +1556,7 @@
           "timeout": 6,
           "runtime": "nodejs18.x",
           "vpc": {},
-          "versionLogicalId": "AuthServiceLambdaVersion3LdAcJags4EqBGWSsqxFLLagpC6Y9Dt3O3wSBdmrwo"
+          "versionLogicalId": "AuthServiceLambdaVersionIskx8EQkDzT3ciSp5uDRFtgVpNYvgtiCqK0cWHEXALM"
         },
         "blogService": {
           "handler": "blogService/blogService.handler",
@@ -1622,7 +1647,7 @@
           "timeout": 6,
           "runtime": "nodejs18.x",
           "vpc": {},
-          "versionLogicalId": "BlogServiceLambdaVersionGqNqbUMVIaHHZsOfLrNFFWM8vUc7IIUEpeDY7vFjA"
+          "versionLogicalId": "BlogServiceLambdaVersionubUU4EtDBZpkpA8t86dollTVAELOEueEqOnJb7JRTm0"
         },
         "speechService": {
           "handler": "speechService/speechService.handler",
@@ -1656,18 +1681,19 @@
           "timeout": 6,
           "runtime": "nodejs18.x",
           "vpc": {},
-          "versionLogicalId": "SpeechServiceLambdaVersionAvokcbAAZGTShhUaZoMSYeU7aNaDY1nXH7PLJn7g"
+          "versionLogicalId": "SpeechServiceLambdaVersionDA2Us9Zga0P4sK5vzVTxCK9K17Cq4Eein1ivGd5BSJM"
         }
       }
     },
-    "serviceRawFile": "service: serverless-microservices-backend  # Name of your service\r\n\r\nprovider:\r\n  name: aws\r\n  runtime: nodejs18.x\r\n  region: ap-south-1\r\n  environment:\r\n    JWT_SECRET: abcd1234  # Environment variable shared across all functions\r\n  iamRoleStatements:\r\n    - Effect: \"Allow\"\r\n      Action:\r\n        - \"lambda:GetLayerVersion\"  # Allow Lambda functions to retrieve the Layer version\r\n      Resource:\r\n        - \"arn:aws:lambda:ap-south-1:905418375464:layer:common-libraries:*\"  # All versions of the Layer\r\n    - Effect: \"Allow\"\r\n      Action:\r\n        - dynamodb:GetItem\r\n        - dynamodb:PutItem\r\n        - dynamodb:DeleteItem\r\n        - dynamodb:Query\r\n      Resource:\r\n        - arn:aws:dynamodb:ap-south-1:905418375464:table/Users\r\n        - arn:aws:dynamodb:ap-south-1:905418375464:table/SavedBlogs\r\n    - Effect: \"Allow\"\r\n      Action:\r\n        - polly:SynthesizeSpeech\r\n      Resource: \"*\"\r\n\r\nlayers:\r\n  commonLibs:\r\n    path: layers/common-libraries  # Path to your \"common-libraries\" folder\r\n    description: \"Common libraries for all services (serverless-http, express, aws-sdk, bcryptjs, jsonwebtoken)\"\r\n    compatibleRuntimes:\r\n      - nodejs18.x  # Ensure this matches your runtime\r\n\r\nfunctions:\r\n  authService:\r\n    handler: authService/authService.handler\r\n    layers:\r\n      - arn:aws:lambda:ap-south-1:905418375464:layer:common-libraries:3  # Updated to version 3\r\n    events:\r\n      - http:\r\n          path: /register\r\n          method: post\r\n          cors:\r\n            origin: '*'  # Allow all origins or restrict to your frontend domain\r\n            headers:\r\n              - Content-Type\r\n              - Authorization\r\n            allowCredentials: false  # If you are not using cookies\r\n      - http:\r\n          path: /login\r\n          method: post\r\n          cors:\r\n            origin: '*'  # Allow all origins\r\n            headers:\r\n              - Content-Type\r\n              - Authorization\r\n            allowCredentials: false\r\n\r\n  blogService:\r\n    handler: blogService/blogService.handler\r\n    layers:\r\n      - arn:aws:lambda:ap-south-1:905418375464:layer:common-libraries:3  # Updated to version 3\r\n    events:\r\n      - http:\r\n          path: /api/save-blog\r\n          method: post\r\n          cors:\r\n            origin: '*'  # Can restrict to specific domains if necessary\r\n            headers:\r\n              - Content-Type\r\n              - Authorization\r\n      - http:\r\n          path: /api/get-blogs\r\n          method: get\r\n          cors:\r\n            origin: '*'  # Allow all origins\r\n            headers:\r\n              - Content-Type\r\n              - Authorization\r\n      - http:\r\n          path: /api/get-blog/{blogId}\r\n          method: get\r\n          cors:\r\n            origin: '*'  # Allow all origins\r\n            headers:\r\n              - Content-Type\r\n              - Authorization\r\n      - http:\r\n          path: /api/delete-blog\r\n          method: delete\r\n          cors:\r\n            origin: '*'  # Allow all origins\r\n            headers:\r\n              - Content-Type\r\n              - Authorization\r\n\r\n  speechService:\r\n    handler: speechService/speechService.handler\r\n    layers:\r\n      - arn:aws:lambda:ap-south-1:905418375464:layer:common-libraries:3  # Updated to version 3\r\n    events:\r\n      - http:\r\n          path: /api/speech\r\n          method: post\r\n          cors:\r\n            origin: '*'  # Allow all origins\r\n            headers:\r\n              - Content-Type\r\n              - Authorization\r\n\r\n# plugins:\r\n#   - serverless-offline \r\n",
+    "serviceRawFile": "# \"org\" ensures this Service is used with the correct Serverless Framework Access Key.\r\norg: laksharmaa\r\nservice: serverless-microservices-backend # Name of your service\r\n\r\nprovider:\r\n  name: aws\r\n  runtime: nodejs18.x\r\n  region: ap-south-1\r\n  environment:\r\n    JWT_SECRET: abcd1234 # Environment variable shared across all functions\r\n    S3_BUCKET_NAME: polly-audiofiles-bucket # The name of your S3 bucket\r\n  iamRoleStatements:\r\n    - Effect: \"Allow\"\r\n      Action:\r\n        - \"lambda:GetLayerVersion\" # Allow Lambda functions to retrieve the Layer version\r\n      Resource:\r\n        - \"arn:aws:lambda:ap-south-1:905418375464:layer:common-libraries:*\" # All versions of the Layer\r\n    - Effect: \"Allow\"\r\n      Action:\r\n        - dynamodb:GetItem\r\n        - dynamodb:PutItem\r\n        - dynamodb:DeleteItem\r\n        - dynamodb:Query\r\n      Resource:\r\n        - arn:aws:dynamodb:ap-south-1:905418375464:table/Users\r\n        - arn:aws:dynamodb:ap-south-1:905418375464:table/SavedBlogs\r\n    - Effect: \"Allow\"\r\n      Action:\r\n        - polly:SynthesizeSpeech\r\n      Resource: \"*\"\r\n    - Effect: \"Allow\"\r\n      Action:\r\n        - s3:PutObject\r\n        - s3:GetObject\r\n        - s3:GetObjectAttributes\r\n        - s3:ListBucket\r\n      Resource:\r\n        - arn:aws:s3:::polly-audiofiles-bucket/*\r\n\r\nlayers:\r\n  commonLibs:\r\n    path: layers/common-libraries # Path to your \"common-libraries\" folder\r\n    description: \"Common libraries for all services (serverless-http, express, aws-sdk, bcryptjs, jsonwebtoken)\"\r\n    compatibleRuntimes:\r\n      - nodejs18.x # Ensure this matches your runtime\r\n\r\nfunctions:\r\n  authService:\r\n    handler: authService/authService.handler\r\n    layers:\r\n      - arn:aws:lambda:ap-south-1:905418375464:layer:common-libraries:3 # Updated to version 3\r\n    events:\r\n      - http:\r\n          path: /register\r\n          method: post\r\n          cors:\r\n            origin: \"*\" # Allow all origins or restrict to your frontend domain\r\n            headers:\r\n              - Content-Type\r\n              - Authorization\r\n            allowCredentials: false # If you are not using cookies\r\n      - http:\r\n          path: /login\r\n          method: post\r\n          cors:\r\n            origin: \"*\" # Allow all origins\r\n            headers:\r\n              - Content-Type\r\n              - Authorization\r\n            allowCredentials: false\r\n\r\n  blogService:\r\n    handler: blogService/blogService.handler\r\n    layers:\r\n      - arn:aws:lambda:ap-south-1:905418375464:layer:common-libraries:3 # Updated to version 3\r\n    events:\r\n      - http:\r\n          path: /api/save-blog\r\n          method: post\r\n          cors:\r\n            origin: \"*\" # Can restrict to specific domains if necessary\r\n            headers:\r\n              - Content-Type\r\n              - Authorization\r\n      - http:\r\n          path: /api/get-blogs\r\n          method: get\r\n          cors:\r\n            origin: \"*\" # Allow all origins\r\n            headers:\r\n              - Content-Type\r\n              - Authorization\r\n      - http:\r\n          path: /api/get-blog/{blogId}\r\n          method: get\r\n          cors:\r\n            origin: \"*\" # Allow all origins\r\n            headers:\r\n              - Content-Type\r\n              - Authorization\r\n      - http:\r\n          path: /api/delete-blog\r\n          method: delete\r\n          cors:\r\n            origin: \"*\" # Allow all origins\r\n            headers:\r\n              - Content-Type\r\n              - Authorization\r\n\r\n  speechService:\r\n    handler: speechService/speechService.handler\r\n    layers:\r\n      - arn:aws:lambda:ap-south-1:905418375464:layer:common-libraries:3 # Updated to version 3\r\n    events:\r\n      - http:\r\n          path: /api/speech\r\n          method: post\r\n          cors:\r\n            origin: \"*\" # Allow all origins\r\n            headers:\r\n              - Content-Type\r\n              - Authorization\r\n\r\n# plugins:\r\n#   - serverless-offline",
     "command": [
       "deploy"
     ],
     "options": {},
     "error": null,
     "params": {},
-    "machineId": "52438bfbc123b504344183ecfd351e53",
+    "machineId": "6f8020ee250f8937454bf0f0b60e8aba",
+    "stage": "dev",
     "accessKeyV2": "<REDACTED>",
     "accessKeyV1": "<REDACTED>",
     "orgId": "deb77537-4d64-49b3-b532-0d99c28e435e",
@@ -1685,38 +1711,40 @@
     "userName": "laksharmaa",
     "subscription": null,
     "userEmail": "lakshya_sharma@srmap.edu.in",
+    "serviceProviderAwsRegion": "ap-south-1",
     "serviceProviderAwsCredentials": "<REDACTED>",
     "serviceProviderAwsAccountId": "905418375464",
-    "projectType": "framework",
-    "versionSf": "4.2.5",
+    "projectType": "traditional",
+    "versionSf": "4.4.5",
     "serviceProviderAwsCfStackName": "serverless-microservices-backend-dev",
     "integrations": {},
+    "serviceUniqueId": "arn:aws:cloudformation:ap-south-1:905418375464:stack/serverless-microservices-backend-dev/07341170-6d0d-11ef-ac3e-02a00db77fd5",
     "serviceProviderAwsCfStackId": "arn:aws:cloudformation:ap-south-1:905418375464:stack/serverless-microservices-backend-dev/07341170-6d0d-11ef-ac3e-02a00db77fd5",
     "serviceProviderAwsCfStackCreated": "2024-09-07T11:33:39.529Z",
-    "serviceProviderAwsCfStackUpdated": "2024-09-07T15:16:26.558Z",
+    "serviceProviderAwsCfStackUpdated": "2024-10-10T10:24:58.952Z",
     "serviceProviderAwsCfStackStatus": "UPDATE_COMPLETE",
     "serviceProviderAwsCfStackOutputs": [
       {
         "OutputKey": "CommonLibsLambdaLayerHash",
-        "OutputValue": "94fa485837a4ea19a7c0ada08ca97847a823dec7",
+        "OutputValue": "1cf8abec94d7523544aa8fa883c1df033bd3e3c7",
         "Description": "Current Lambda layer hash",
         "ExportName": "sls-serverless-microservices-backend-dev-CommonLibsLambdaLayerHash"
       },
       {
         "OutputKey": "CommonLibsLambdaLayerS3Key",
-        "OutputValue": "serverless/serverless-microservices-backend/dev/1725720634055-2024-09-07T14:50:34.055Z/commonLibs.zip",
+        "OutputValue": "serverless/serverless-microservices-backend/dev/1728311118031-2024-10-07T14:25:18.031Z/commonLibs.zip",
         "Description": "Current Lambda layer S3Key",
         "ExportName": "sls-serverless-microservices-backend-dev-CommonLibsLambdaLayerS3Key"
       },
       {
         "OutputKey": "AuthServiceLambdaFunctionQualifiedArn",
-        "OutputValue": "arn:aws:lambda:ap-south-1:905418375464:function:serverless-microservices-backend-dev-authService:5",
+        "OutputValue": "arn:aws:lambda:ap-south-1:905418375464:function:serverless-microservices-backend-dev-authService:13",
         "Description": "Current Lambda function version",
         "ExportName": "sls-serverless-microservices-backend-dev-AuthServiceLambdaFunctionQualifiedArn"
       },
       {
         "OutputKey": "SpeechServiceLambdaFunctionQualifiedArn",
-        "OutputValue": "arn:aws:lambda:ap-south-1:905418375464:function:serverless-microservices-backend-dev-speechService:5",
+        "OutputValue": "arn:aws:lambda:ap-south-1:905418375464:function:serverless-microservices-backend-dev-speechService:13",
         "Description": "Current Lambda function version",
         "ExportName": "sls-serverless-microservices-backend-dev-SpeechServiceLambdaFunctionQualifiedArn"
       },
@@ -1733,13 +1761,13 @@
       },
       {
         "OutputKey": "CommonLibsLambdaLayerQualifiedArn",
-        "OutputValue": "arn:aws:lambda:ap-south-1:905418375464:layer:commonLibs:18",
+        "OutputValue": "arn:aws:lambda:ap-south-1:905418375464:layer:commonLibs:20",
         "Description": "Current Lambda layer version",
         "ExportName": "sls-serverless-microservices-backend-dev-CommonLibsLambdaLayerQualifiedArn"
       },
       {
         "OutputKey": "BlogServiceLambdaFunctionQualifiedArn",
-        "OutputValue": "arn:aws:lambda:ap-south-1:905418375464:function:serverless-microservices-backend-dev-blogService:5",
+        "OutputValue": "arn:aws:lambda:ap-south-1:905418375464:function:serverless-microservices-backend-dev-blogService:13",
         "Description": "Current Lambda function version",
         "ExportName": "sls-serverless-microservices-backend-dev-BlogServiceLambdaFunctionQualifiedArn"
       }
