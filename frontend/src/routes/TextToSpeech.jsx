@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
 function TextToSpeech() {
   const [text, setText] = useState('');
@@ -9,6 +10,8 @@ function TextToSpeech() {
   const [notification, setNotification] = useState(''); // Notification card message
   const [notificationType, setNotificationType] = useState(''); // Type of notification (success or error)
   const [message, setMessage] = useState(''); // UI Message
+
+  const navigate = useNavigate(); // Initialize the navigate function
 
   const handleTextChange = (e) => {
     const newText = e.target.value;
@@ -168,6 +171,14 @@ function TextToSpeech() {
           </div>
         </div>
       </form>
+
+      {/* Floating button to redirect to create blog page */}
+      <button
+        onClick={() => navigate('/create-blog')}
+        className="fixed bottom-10 right-10 bg-green-500 text-white p-4 rounded-full shadow-lg hover:bg-green-600 transition"
+      >
+        + Create Blog
+      </button>
     </div>
   );
 }
