@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 function CreateBlog() {
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
+  const [blogTitle, setTitle] = useState('');
+  const [blogContent, setContent] = useState('');
   const [isPublic, setIsPublic] = useState(false);
   const [message, setMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -29,7 +29,7 @@ function CreateBlog() {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ title, content, isPublic }),
+        body: JSON.stringify({ blogTitle, blogContent, isPublic }),
       });
 
       if (response.ok) {
@@ -55,16 +55,16 @@ function CreateBlog() {
       <form onSubmit={handleSubmit} className="w-full max-w-4xl mx-auto flex flex-col space-y-6">
         <input
           type="text"
-          value={title}
+          value={blogTitle}
           onChange={(e) => setTitle(e.target.value)}
           className="w-full p-4 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-200"
-          placeholder="Enter blog title"
+          placeholder="Enter blog blogTitle"
         />
         <textarea
-          value={content}
+          value={blogContent}
           onChange={(e) => setContent(e.target.value)}
           className="w-full h-[50vh] p-4 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-200 resize-none"
-          placeholder="Write your blog content..."
+          placeholder="Write your blog blogContent..."
         />
 
         <label className="flex items-center space-x-3">
