@@ -8,6 +8,7 @@ import Register from './routes/Register';
 import Navbar from './components/Navbar';
 import SavedBlogs from './components/SavedBlogs';
 import SavedBlogDetails from './routes/SavedBlogDetails'; 
+import CreateBlog from './routes/CreateBlog';
 import './index.css';
 
 const Layout = () => {
@@ -74,6 +75,10 @@ const router = createBrowserRouter([
       {
         path: "/saved-blogs/:blogId", // Add the route with the dynamic parameter
         element: <SavedBlogDetails />,
+      },
+      {
+        path: "/create-blog",
+        element: <CreateBlog />,  // Add the route for blog creation
       }
     ],
   },
