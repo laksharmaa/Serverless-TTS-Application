@@ -175,9 +175,9 @@ function TextToSpeech() {
       {/* Floating button to redirect to create blog page */}
       <button
         onClick={() => navigate('/create-blog')}
-        className="fixed bottom-10 right-10 bg-green-500 text-white p-4 rounded-full shadow-lg hover:bg-green-600 transition"
+        className="fixed bottom-16 right-10 bg-white text-pink-600 p-3 rounded-full shadow-lg hover:bg-blue-200 transition"
       >
-        + Create Blog
+        ✏ Create
       </button>
     </div>
   );
