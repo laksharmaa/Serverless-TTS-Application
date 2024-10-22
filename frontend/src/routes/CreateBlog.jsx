@@ -41,7 +41,7 @@ function CreateBlog() {
         body: JSON.stringify({
           blogTitle,
           blogContent,
-          isPublic,
+          isPublic: isPublic ? 'true' : 'false', // Convert to string 'true' or 'false'
         }),
       });
 
@@ -49,8 +49,16 @@ function CreateBlog() {
         const result = await response.json();
         setNotification('Blog created successfully!');
         setNotificationType('success');
+        
+        // Reset form fields
         setBlogTitle('');
         setBlogContent('');
+        setIsPublic(true);
+
+        // Clear notification after a delay
+        setTimeout(() => {
+          setNotification('');
+        }, 5000);
       } else {
         const errorData = await response.json();
         setMessage(errorData.error || 'An error occurred while creating the blog.');
