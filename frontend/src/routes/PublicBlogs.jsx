@@ -1,55 +1,60 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 function PublicBlogs() {
   const [blogs, setBlogs] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    async function fetchPublicBlogs() {
+    const fetchBlogs = async () => {
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/public-blogs`);
-        if (!response.ok) {
-          throw new Error('Failed to fetch public blogs');
+        const url = import.meta.env.VITE_API_BASE_URL; // Base URL for your API
+        const response = await fetch(`${url}/api/public-blogs`);
+
+        if (response.ok) {
+          const result = await response.json();
+          setBlogs(result);
+        } else {
+          setError('Failed to fetch public blogs');
         }
-        const data = await response.json();
-        setBlogs(data);
-        setIsLoading(false);
       } catch (error) {
-        setError(error.message);
+        setError('An error occurred while fetching public blogs.');
+      } finally {
         setIsLoading(false);
       }
-    }
+    };
 
-    fetchPublicBlogs();
+    fetchBlogs();
   }, []);
 
   if (isLoading) {
-    return <div>Loading public blogs...</div>;
+    return <div className="text-center text-gray-500">Loading public blogs...</div>;
   }
 
   if (error) {
-    return <div>Error: {error}</div>;
+    return <div className="text-center text-red-500">{error}</div>;
   }
 
   return (
-    <div className="public-blogs-container">
-      <h1>Public Blogs</h1>
-      {blogs.length === 0 ? (
-        <p>No public blogs available.</p>
-      ) : (
-        <div className="blog-list">
-          {blogs.map((blog) => (
-            <div key={blog.blogId} className="blog-item">
-              <h2>{blog.blogTitle}</h2>
-              <p>{blog.blogContent.slice(0, 100)}...</p> {/* Preview of content */}
-              <a href={`/public-blog/${blog.blogId}`} className="read-more">
-                Read More
-              </a>
+    <div className="min-h-full flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-900 px-4 py-8">
+      <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">Public Blogs</h1>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-7xl mx-auto">
+        {blogs.map((blog) => (
+          <div key={blog.blogId} className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
+            <div className="p-6">
+              <h2 className="text-2xl font-semibold text-gray-800 dark:text-white mb-2">{blog.blogTitle}</h2>
+              <p className="text-gray-700 dark:text-gray-300 mb-4">
+                {blog.blogContent.length > 150 ? `${blog.blogContent.substring(0, 150)}...` : blog.blogContent}
+              </p>
+              <div className="flex justify-between items-center">
+                <span className="text-sm text-gray-500 dark:text-gray-400">By: {blog.username}</span>
+                <span className="text-sm text-gray-500 dark:text-gray-400">{new Date(blog.createdAt).toLocaleDateString()}</span>
+              </div>
             </div>
-          ))}
-        </div>
-      )}
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
