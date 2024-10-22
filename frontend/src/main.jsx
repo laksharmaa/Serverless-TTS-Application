@@ -7,8 +7,10 @@ import TextToSpeech from './routes/TextToSpeech';
 import Register from './routes/Register';
 import Navbar from './components/Navbar';
 import SavedBlogs from './components/SavedBlogs';
-import SavedBlogDetails from './routes/SavedBlogDetails'; 
+import SavedBlogDetails from './routes/SavedBlogDetails';
 import CreateBlog from './routes/CreateBlog';
+import PublicBlogs from './routes/PublicBlogs';
+import PublicBlogDetails from './routes/PublicBlogDetails';
 import './index.css';
 
 const Layout = () => {
@@ -79,7 +81,15 @@ const router = createBrowserRouter([
       {
         path: "/create-blog",
         element: <CreateBlog />,  // Add the route for blog creation
-      }
+      },
+      {
+        path: "/public-blogs",
+        element: <PublicBlogs />,
+      },
+      {
+        path: "/public-blog/:blogId",
+        element: <PublicBlogDetails />, // Component for displaying single blog details
+      },
     ],
   },
 ]);
