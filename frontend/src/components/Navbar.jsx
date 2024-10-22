@@ -43,7 +43,7 @@ function Navbar({ isLoggedIn, onLogout }) {
           </li>
           <li className={`font-medium ${isActiveLink('/public-blogs') ? 'text-pink-400 font-bold' : 'text-white-700'}`}>
             {/* Add this link to your existing Navbar */}
-            <a href="/public-blogs" className="nav-link">Public Blogs</a>
+            <Link to="/public-blogs">Public Blogs</Link>
           </li>
         </ul>
 
@@ -112,6 +112,13 @@ function Navbar({ isLoggedIn, onLogout }) {
               onClick={toggleMenu}
             >
               Saved Blogs
+            </Link>
+            <Link
+              to="/public-blogs"
+              className="block text-gray-700 font-medium"
+              onClick={toggleMenu}
+            >
+              Blogs
             </Link>
             {isLoggedIn ? (
               <button
