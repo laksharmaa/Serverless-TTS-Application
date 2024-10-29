@@ -10,6 +10,7 @@
 > - 📝 Save and Replay Blogs: Users can save blogs, retrieve previously saved content, and replay the generated audio.
 > - 🚀 Efficient Caching: Avoids regenerating audio if the same text with the same voice combination exists in S3.
 
+
 > ## **Tech Stack Used**
 > - **Frontend:** React.Js
 > - **Backend:** AWS Lambda (Node.js), Serverless Framework
@@ -80,6 +81,23 @@ environment:
 ### 5. Deploy to AWS
 > Use the Serverless Framework to deploy:
 `serverless deploy`
+> The terminal output should look like:
+```
+endpoints:
+  POST - https://jpokwv20g2.execute-api.ap-south-1.amazonaws.com/dev/register
+  POST - https://jpokwv20g2.execute-api.ap-south-1.amazonaws.com/dev/login
+  POST - https://jpokwv20g2.execute-api.ap-south-1.amazonaws.com/dev/api/save-blog
+  GET - https://jpokwv20g2.execute-api.ap-south-1.amazonaws.com/dev/api/get-blogs
+  GET - https://jpokwv20g2.execute-api.ap-south-1.amazonaws.com/dev/api/get-blog/{blogId}
+  DELETE - https://jpokwv20g2.execute-api.ap-south-1.amazonaws.com/dev/api/delete-blog
+  POST - https://jpokwv20g2.execute-api.ap-south-1.amazonaws.com/dev/api/speech
+functions:
+  authService: serverless-microservices-backend-dev-authService (18 kB)
+  blogService: serverless-microservices-backend-dev-blogService (18 kB)
+  speechService: serverless-microservices-backend-dev-speechService (18 kB)
+layers:
+  commonLibs: arn:aws:lambda:ap-south-1:905418375464:layer:commonLibs:18
+```
 
 ### 6. Run the Frontend
 > To run the frontend locally:
