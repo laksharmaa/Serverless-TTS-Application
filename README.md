@@ -10,6 +10,8 @@
 > - 📝 Save and Replay Blogs: Users can save blogs, retrieve previously saved content, and replay the generated audio.
 > - 🚀 Efficient Caching: Avoids regenerating audio if the same text with the same voice combination exists in S3.
 
+> ## **System Architecture:**
+![Architectural-design](https://github.com/user-attachments/assets/c5d3cd93-71ac-4010-8370-d08b0e70931c)
 
 > ## **Tech Stack Used**
 > - **Frontend:** React.Js
