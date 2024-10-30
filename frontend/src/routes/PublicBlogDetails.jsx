@@ -23,19 +23,24 @@ function PublicBlogDetails() {
     fetchBlogDetails();
   }, [blogId]);
 
-  if (isLoading) return <div>Loading blog details...</div>;
-  if (error) return <div>Error: {error}</div>;
+  if (isLoading) return <div className="text-center text-gray-500">Loading blog details...</div>;
+  if (error) return <div className="text-center text-red-500">{error}</div>;
 
   return (
-    <div className="blog-details-container">
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 py-12 px-6">
       {blog ? (
-        <>
-          <h1>{blog.blogTitle}</h1>
-          <p>{blog.blogContent}</p>
-          <p><strong>Published by:</strong> {blog.username}</p>
-        </>
+        <div className="max-w-3xl w-full bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8">
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">{blog.blogTitle}</h1>
+          <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-6">
+            {blog.blogContent}
+          </p>
+          <div className="flex justify-between items-center text-sm text-gray-500 dark:text-gray-400">
+            <span>Published by: <strong>{blog.username}</strong></span>
+            <span>Posted on: {new Date(blog.createdAt).toLocaleDateString()}</span>
+          </div>
+        </div>
       ) : (
-        <p>Blog not found.</p>
+        <p className="text-center text-gray-500">Blog not found.</p>
       )}
     </div>
   );
