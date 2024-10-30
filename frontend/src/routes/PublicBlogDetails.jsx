@@ -36,7 +36,7 @@ function PublicBlogDetails() {
           </p>
           <div className="flex justify-between items-center text-sm text-gray-500 dark:text-gray-400">
             <span>Published by: <strong>{blog.username}</strong></span>
-            <span>Posted on: {new Date(blog.createdAt).toLocaleDateString()}</span>
+            <span>Posted on: {blog.createdAt ? new Date(blog.createdAt).toLocaleDateString() : 'Date not available'}</span>
           </div>
         </div>
       ) : (
