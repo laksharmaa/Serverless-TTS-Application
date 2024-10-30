@@ -10,32 +10,21 @@ function PublicBlogDetails() {
   useEffect(() => {
     async function fetchBlogDetails() {
       try {
-        // Updated to use the new public-blog endpoint
         const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/public-blog/${blogId}`);
-        
-        if (!response.ok) {
-          throw new Error('Failed to fetch public blog details');
-        }
-        
+        if (!response.ok) throw new Error('Failed to fetch public blog details');
         const data = await response.json();
         setBlog(data);
-        setIsLoading(false);
       } catch (error) {
         setError(error.message);
+      } finally {
         setIsLoading(false);
       }
     }
-
     fetchBlogDetails();
   }, [blogId]);
 
-  if (isLoading) {
-    return <div>Loading blog details...</div>;
-  }
-
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
+  if (isLoading) return <div>Loading blog details...</div>;
+  if (error) return <div>Error: {error}</div>;
 
   return (
     <div className="blog-details-container">
