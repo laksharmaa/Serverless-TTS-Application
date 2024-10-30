@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
 function PublicBlogs() {
   const [blogs, setBlogs] = useState([]);
@@ -41,7 +42,11 @@ function PublicBlogs() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-7xl mx-auto">
         {blogs.map((blog) => (
-          <div key={blog.blogId} className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
+          <Link 
+            to={`/public-blog/${blog.blogId}`} 
+            key={blog.blogId} 
+            className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden transform transition duration-300 hover:scale-105"
+          >
             <div className="p-6">
               <h2 className="text-2xl font-semibold text-gray-800 dark:text-white mb-2">{blog.blogTitle}</h2>
               <p className="text-gray-700 dark:text-gray-300 mb-4">
@@ -52,7 +57,7 @@ function PublicBlogs() {
                 <span className="text-sm text-gray-500 dark:text-gray-400">{new Date(blog.createdAt).toLocaleDateString()}</span>
               </div>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
     </div>
