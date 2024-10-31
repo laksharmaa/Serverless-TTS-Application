@@ -24,6 +24,9 @@ provider:
       Resource:
         - arn:aws:dynamodb:ap-south-1:905418375464:table/Users
         - arn:aws:dynamodb:ap-south-1:905418375464:table/SavedBlogs
+        - arn:aws:dynamodb:ap-south-1:905418375464:table/Blogs
+        - arn:aws:dynamodb:ap-south-1:905418375464:table/Blogs/index/isPublic-index # Add this line for the index
+        - arn:aws:dynamodb:ap-south-1:905418375464:table/Blogs/index/blogId-index # Add this line for the index
     - Effect: "Allow"
       Action:
         - polly:SynthesizeSpeech
@@ -35,7 +38,8 @@ provider:
         - s3:GetObjectAttributes
         - s3:ListBucket
       Resource:
-        - arn:aws:s3:::polly-audiofiles-bucket/*
+        - arn:aws:s3:::polly-audiofiles-bucket # This is for bucket-level permissions like ListBucket
+        - arn:aws:s3:::polly-audiofiles-bucket/* # This is for object-level permissions like GetObject
 
 layers:
   commonLibs:
@@ -106,6 +110,25 @@ functions:
             headers:
               - Content-Type
               - Authorization
+      
+      - http:
+          path: /api/public-blogs
+          method: get
+          cors:
+            origin: "*" # Allow all origins
+            headers:
+              - Content-Type
+              - Authorization
+
+      - http:
+          path: /api/public-blog/{blogId} # New endpoint to fetch a single public blog by ID
+          method: get
+          cors:
+            origin: "*" # Allow all origins
+            headers:
+              - Content-Type
+              - Authorization
+
 
   speechService:
     handler: speechService/speechService.handler
@@ -120,6 +143,21 @@ functions:
             headers:
               - Content-Type
               - Authorization
+  createBlogService:
+    handler: createBlogService/createBlogService.handler
+    layers:
+      - arn:aws:lambda:ap-south-1:905418375464:layer:common-libraries:3 # Updated to version 3
+    events:
+      - http:
+          path: /api/create-blog
+          method: post
+          cors:
+            origin: "*"
+            headers:
+              - Content-Type
+              - Authorization
+    
+ 
 
 # plugins:
 #   - serverless-offline

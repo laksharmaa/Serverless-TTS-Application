@@ -1,3 +1,4 @@
+// src/components/CreateBlog.jsx
 import React, { useState } from 'react';
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
@@ -48,7 +49,7 @@ function CreateBlog() {
   
     if (!blogTitle.trim() || !blogContent.trim()) {
       setNotification('Blog title and content are required.');
-      setNotificationType('error');
+      setNotificationType('error')
       setIsLoading(false);
       return;
     }
@@ -80,7 +81,7 @@ function CreateBlog() {
       } else {
         const errorData = await response.json();
         setNotification(errorData.error || 'An error occurred while creating the blog.');
-        setNotificationType('error');
+        setNotificationType('error'), 5000;
       }
     } catch (error) {
       setNotification('An error occurred while creating the blog.');
@@ -89,6 +90,7 @@ function CreateBlog() {
       setIsLoading(false);
     }
   };
+  
 
   return (
     <div className={`min-h-screen flex flex-col items-center justify-center ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-900'} px-4`}>
@@ -102,7 +104,7 @@ function CreateBlog() {
 
       <form onSubmit={handleSubmit} className="w-full max-w-3xl mx-auto">
         {/* Card for title input and editor */}
-        <div className={`p-6 shadow-lg rounded-lg ${isDarkMode ? 'bg-neutral-800 text-gray-200' : 'bg-white text-gray-900'}`}>
+        <div className={`p-6 shadow-lg rounded-lg ${isDarkMode ? 'bg-gray-800 text-gray-200' : 'bg-white text-gray-900'}`}>
           {/* Blog Title */}
           <input
             type="text"
@@ -171,45 +173,42 @@ function CreateBlog() {
               {/* Editor Content Area */}
               <EditorContent
                 editor={editor}
-                className={`h-[10rem] overflow-auto p-4 transition-all duration-200 placeholder-gray-400 ${
-                  isDarkMode ? 'bg-neutral-900 text-gray-200' : 'bg-white text-gray-900'
-                }`}
+                className={`h-[10rem] overflow-auto p-4 transition-all duration-200 placeholder-gray-400 ${isDarkMode ? 'bg-neutral-900 text-gray-200' : 'bg-white text-gray-900'
+                  }`}
               />
             </div>
           </div>
         </div>
 
-        {/* Public Checkbox */}
-        <div className="flex items-center my-4">
-          <label htmlFor="isPublic" className="mr-4">Make Public:</label>
-          <input
-            type="checkbox"
-            id="isPublic"
-            checked={isPublic}
-            onChange={(e) => setIsPublic(e.target.checked)}
-            className="h-6 w-6 text-blue-600 border-gray-300 rounded"
-          />
+        {/* Controls Row for Public Checkbox and Submit Button */}
+        <div className="flex items-center justify-between mt-4">
+          <div className="flex items-center">
+            <label htmlFor="isPublic" className="mr-2">Make Public:</label>
+            <input
+              type="checkbox"
+              id="isPublic"
+              checked={isPublic}
+              onChange={(e) => setIsPublic(e.target.checked)}
+              className="h-6 w-6 text-blue-600 border-gray-300 rounded"
+            />
+          </div>
+
+          {/* Submit Button */}
+          <button
+            type="submit"
+            className={`py-3 px-4 flex justify-center items-center text-sm font-medium rounded-full border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none ${isLoading ? 'cursor-not-allowed' : ''
+              }`}
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <span className="animate-spin inline-block h-5 w-5 border-[3px] border-current border-t-transparent text-white rounded-full" role="status" aria-label="loading">
+                <span className="sr-only">Loading...</span>
+              </span>
+            ) : (
+              <>Create Blog</>
+            )}
+          </button>
         </div>
-
-        {/* Submit Button */}
-        <button
-  type="submit"
-  className={`py-3 px-4 flex justify-center items-center w-full md:w-auto text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none ${
-    isLoading ? 'cursor-not-allowed' : ''
-  }`}
-  disabled={isLoading}
->
-  {isLoading ? (
-    <span className="animate-spin inline-block h-5 w-5 border-[3px] border-current border-t-transparent text-white rounded-full" role="status" aria-label="loading">
-      <span className="sr-only">Loading...</span>
-    </span>
-  ) : (
-    <>
-      Create Blog
-    </>
-  )}
-</button>
-
       </form>
     </div>
   );

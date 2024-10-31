@@ -39,7 +39,7 @@ function CustomNavbar({ isLoggedIn, onLogout }) {
           </Link>
         </div>
 
-        {/* Search Icon, Dark Mode Toggle */}
+        {/* Icons: Search, DarkModeToggle */}
         <div className="hidden lg:flex items-center space-x-4">
           <IconButton color="blue-gray" variant="text" size="sm">
             <MagnifyingGlassIcon className="h-6 w-6" />
@@ -51,18 +51,19 @@ function CustomNavbar({ isLoggedIn, onLogout }) {
               variant="text"
               color={isDarkMode ? "white" : "gray"}
               onClick={onLogout}
+              className="hidden lg:flex lg:rounded-full"
             >
               Logout
             </Button>
           ) : (
-            <div className="flex items-center space-x-4">
+            <div className="hidden lg:flex items-center space-x-4">
               <Link to="/login">
-                <Button size="sm" variant="gradient" color="blue">
+                <Button size="sm" variant="gradient" color="blue" className="rounded-full">
                   Login
                 </Button>
               </Link>
               <Link to="/register">
-                <Button size="sm" variant="gradient" color="blue">
+                <Button size="sm" variant="gradient" color="blue" className="rounded-full mr-4">
                   Sign Up
                 </Button>
               </Link>
@@ -70,16 +71,26 @@ function CustomNavbar({ isLoggedIn, onLogout }) {
           )}
         </div>
 
-        {/* Mobile Nav Toggle */}
-        <IconButton
-          size="sm"
-          color="blue-gray"
-          variant="text"
-          onClick={toggleIsNavOpen}
-          className="lg:hidden"
-        >
-          <Bars2Icon className="h-6 w-6" />
-        </IconButton>
+        {/* Mobile Icons: Search, DarkModeToggle, and Drawer */}
+        <div className="flex items-center space-x-2 lg:hidden">
+          {/* Search Icon */}
+          <IconButton color="blue-gray" variant="text" size="sm">
+            <MagnifyingGlassIcon className="h-6 w-6" />
+          </IconButton>
+
+          {/* Dark Mode Toggle */}
+          <DarkModeToggle />
+
+          {/* Drawer (Mobile Nav Toggle) */}
+          <IconButton
+            size="sm"
+            color="blue-gray"
+            variant="text"
+            onClick={toggleIsNavOpen}
+          >
+            <Bars2Icon className="h-6 w-6" />
+          </IconButton>
+        </div>
       </div>
 
       {/* Mobile Menu */}
@@ -93,9 +104,6 @@ function CustomNavbar({ isLoggedIn, onLogout }) {
           </Link>
           <Link to="/public-blogs" onClick={toggleIsNavOpen} className="font-medium">
             Public Blogs
-          </Link>
-          <Link to="/search" onClick={toggleIsNavOpen} className="font-medium">
-            <MagnifyingGlassIcon className="inline h-5 w-5 mr-1" /> Search
           </Link>
           {isLoggedIn ? (
             <span onClick={onLogout} className="font-medium cursor-pointer">
