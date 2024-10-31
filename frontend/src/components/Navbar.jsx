@@ -1,155 +1,120 @@
-import React, { useState } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
-import logo from '../assets/logo.png'; // Importing the logo from the assets folder
+// src/components/CustomNavbar.jsx
+import React, { useState } from "react";
+import { MagnifyingGlassIcon, Bars2Icon } from "@heroicons/react/24/solid";
+import { Link } from "react-router-dom";
+import { Navbar, MobileNav, Typography, IconButton, Button } from "@material-tailwind/react";
+import logo from "../assets/logo.png";
+import DarkModeToggle from "./DarkModeToggle";
+import { useTheme } from "../context/ThemeContext"; // Import theme context
 
-function Navbar({ isLoggedIn, onLogout }) {
-  const [isOpen, setIsOpen] = useState(false);
-  const navigate = useNavigate();
-  const location = useLocation(); // Hook to get the current route
+function CustomNavbar({ isLoggedIn, onLogout }) {
+  const [isNavOpen, setIsNavOpen] = useState(false);
+  const { isDarkMode } = useTheme(); // Get theme state from context
 
-  const toggleMenu = () => {
-    setIsOpen(!isOpen);
-  };
-
-  const handleLogout = () => {
-    onLogout();
-    navigate('/login'); // Redirect to login page after logout
-  };
-
-  // Function to check if a route is active
-  const isActiveLink = (path) => location.pathname === path;
+  // Toggle nav open state
+  const toggleIsNavOpen = () => setIsNavOpen((cur) => !cur);
 
   return (
-    <header className="sticky inset-0 z-50 border-b border-slate-100 bg-opacity-50 backdrop-blur-lg h-16"> {/* Set navbar height */}
-      <nav className="flex max-w-7xl mx-auto gap-8 px-6 transition-all duration-200 ease-in-out lg:px-12 py-0 h-full">
+    <Navbar
+      className={`sticky top-0 z-50 mx-auto max-w-screen-xl p-2 lg:rounded-full lg:pl-6 shadow-md opacity-80 ${
+        isDarkMode ? "bg-gray-800 text-white border-0" : "bg-white text-gray-900"
+      }`}
+    >
+      <div className="relative flex items-center justify-between">
         {/* Logo */}
-        <div className="items-center h-full">
-          <Link to="/" className="h-full flex items-center"> {/* Center logo vertically */}
-            <img
-              src={logo}
-              alt="Logo"
-              className="max-h-28 object-contain"  // Constrain the height and maintain aspect ratio
-            />
+        <Typography as={Link} to="/" className="mr-4 ml-2 flex items-center">
+          <img src={logo} alt="Logo" className="max-h-10 object-contain mr-2" />
+        </Typography>
+
+        {/* Links */}
+        <div className="hidden lg:flex space-x-4">
+          <Link to="/text-to-speech" className="font-medium">
+            Narrate Blog
+          </Link>
+          <Link to="/saved-blogs" className="font-medium">
+            Saved Blogs
+          </Link>
+          <Link to="/public-blogs" className="font-medium">
+            Public Blogs
           </Link>
         </div>
 
-        {/* Navigation Links */}
-        <ul className="hidden items-center justify-center gap-6 md:flex">
-          <li className={`font-medium ${isActiveLink('/text-to-speech') ? 'text-pink-400 font-bold' : 'text-white-700'}`}>
-            <Link to="/text-to-speech">Narrate Blog</Link>
-          </li>
-          <li className={`font-medium ${isActiveLink('/saved-blogs') ? 'text-pink-400 font-bold' : 'text-white-700'}`}>
-            <Link to="/saved-blogs">Saved Blogs</Link>
-          </li>
-          <li className={`font-medium ${isActiveLink('/public-blogs') ? 'text-pink-400 font-bold' : 'text-white-700'}`}>
-            {/* Add this link to your existing Navbar */}
-            <Link to="/public-blogs">Public Blogs</Link>
-          </li>
-        </ul>
-
-        {/* Spacer */}
-        <div className="flex-grow"></div>
-
-        {/* User actions */}
-        <div className="hidden items-center justify-center gap-6 md:flex">
+        {/* Search Icon, Dark Mode Toggle */}
+        <div className="hidden lg:flex items-center space-x-4">
+          <IconButton color="blue-gray" variant="text" size="sm">
+            <MagnifyingGlassIcon className="h-6 w-6" />
+          </IconButton>
+          <DarkModeToggle />
           {isLoggedIn ? (
-            <button
-              onClick={handleLogout}
-              className="text-white-700 hover:text-pink-500 font-medium"
+            <Button
+              size="sm"
+              variant="text"
+              color={isDarkMode ? "white" : "gray"}
+              onClick={onLogout}
             >
               Logout
-            </button>
+            </Button>
+          ) : (
+            <div className="flex items-center space-x-4">
+              <Link to="/login">
+                <Button size="sm" variant="gradient" color="blue">
+                  Login
+                </Button>
+              </Link>
+              <Link to="/register">
+                <Button size="sm" variant="gradient" color="blue">
+                  Sign Up
+                </Button>
+              </Link>
+            </div>
+          )}
+        </div>
+
+        {/* Mobile Nav Toggle */}
+        <IconButton
+          size="sm"
+          color="blue-gray"
+          variant="text"
+          onClick={toggleIsNavOpen}
+          className="lg:hidden"
+        >
+          <Bars2Icon className="h-6 w-6" />
+        </IconButton>
+      </div>
+
+      {/* Mobile Menu */}
+      <MobileNav open={isNavOpen} className="overflow-scroll lg:hidden">
+        <div className="flex flex-col space-y-2">
+          <Link to="/text-to-speech" onClick={toggleIsNavOpen} className="font-medium">
+            Narrate Blog
+          </Link>
+          <Link to="/saved-blogs" onClick={toggleIsNavOpen} className="font-medium">
+            Saved Blogs
+          </Link>
+          <Link to="/public-blogs" onClick={toggleIsNavOpen} className="font-medium">
+            Public Blogs
+          </Link>
+          <Link to="/search" onClick={toggleIsNavOpen} className="font-medium">
+            <MagnifyingGlassIcon className="inline h-5 w-5 mr-1" /> Search
+          </Link>
+          {isLoggedIn ? (
+            <span onClick={onLogout} className="font-medium cursor-pointer">
+              Logout
+            </span>
           ) : (
             <>
-              <Link to="/login" className={`font-medium ${isActiveLink('/login') ? 'rounded-md bg-gradient-to-br from-blue-600 to-blue-400 px-3 py-1.5 font-medium text-white shadow-md shadow-blue-400/50 transition-transform duration-200 ease-in-out hover:scale-105"' : 'text-white-700'}`}>
+              <Link to="/login" onClick={toggleIsNavOpen} className="font-medium">
                 Login
               </Link>
-              <Link
-                to="/register"
-                className={`font-medium ${isActiveLink('/register') ? 'rounded-md bg-gradient-to-br from-blue-600 to-blue-400 px-3 py-1.5 font-medium text-white shadow-md shadow-blue-400/50 transition-transform duration-200 ease-in-out hover:scale-105"' : 'text-white-700'}`}>
-                Sign up
+              <Link to="/register" onClick={toggleIsNavOpen} className="font-medium">
+                Sign Up
               </Link>
             </>
           )}
         </div>
-
-        {/* Mobile Menu Button */}
-        <div className="relative flex items-center justify-center md:hidden">
-          <button type="button" onClick={toggleMenu}>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth="1.5"
-              stroke="currentColor"
-              aria-hidden="true"
-              className="h-6 w-auto text-white-900"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
-              />
-            </svg>
-          </button>
-        </div>
-      </nav>
-
-      {/* Mobile Menu */}
-      {
-        isOpen && (
-          <div className="md:hidden bg-white shadow-md p-4 space-y-2">
-            <Link
-              to="/text-to-speech"
-              className="block text-gray-700 font-medium"
-              onClick={toggleMenu}
-            >
-              Narrate Blog
-            </Link>
-            <Link
-              to="/saved-blogs"
-              className="block text-gray-700 font-medium"
-              onClick={toggleMenu}
-            >
-              Saved Blogs
-            </Link>
-            <Link
-              to="/public-blogs"
-              className="block text-gray-700 font-medium"
-              onClick={toggleMenu}
-            >
-              Blogs
-            </Link>
-            {isLoggedIn ? (
-              <button
-                onClick={handleLogout}
-                className="block text-gray-700 font-medium"
-              >
-                Logout
-              </button>
-            ) : (
-              <>
-                <Link
-                  to="/login"
-                  className="block text-gray-700 font-medium"
-                  onClick={toggleMenu}
-                >
-                  Login
-                </Link>
-                <Link
-                  to="/register"
-                  className="backdrop-filter backdrop-blur-lg p-8 shadow-md block bg-indigo-500 text-white rounded-md px-3 py-2 text-center"
-                  onClick={toggleMenu}
-                >
-                  Sign up
-                </Link>
-              </>
-            )}
-          </div>
-        )
-      }
-    </header >
+      </MobileNav>
+    </Navbar>
   );
 }
 
-export default Navbar;
+export default CustomNavbar;

@@ -1,3 +1,15 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* src/index.css */
+
+html {
+    transition: background-color 0.4s ease, color 0.4s ease;
+  }
+  
+  body, .bg-gray-100, .bg-gray-900, .text-gray-900, .text-gray-200, .bg-white, .bg-gray-800 {
+    transition: background-color 0.4s ease, color 0.4s ease;
+  }
+
+  

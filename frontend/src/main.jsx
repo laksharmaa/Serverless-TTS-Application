@@ -11,6 +11,8 @@ import SavedBlogDetails from './routes/SavedBlogDetails';
 import CreateBlog from './routes/CreateBlog';
 import PublicBlogs from './routes/PublicBlogs';
 import PublicBlogDetails from './routes/PublicBlogDetails';
+import { ThemeProvider } from "./context/ThemeContext.jsx";
+import Banner from './components/Banner';
 import './index.css';
 
 const Layout = () => {
@@ -37,8 +39,12 @@ const Layout = () => {
   };
 
   return (
+
+    
+
     <div className="min-h-screen flex flex-col bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-200">
       <Navbar isLoggedIn={isLoggedIn} onLogout={handleLogout} />
+      <Banner/>
       <div className="flex-grow flex flex-col overflow-hidden"> {/* Adjust this line */}
         <div className="flex-grow overflow-y-auto h-full"> {/* Adjust this line */}
           <Outlet />
@@ -56,7 +62,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <TextToSpeech />,
+        element: <CreateBlog />,
       },
       {
         path: "/text-to-speech",
@@ -96,6 +102,8 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <ThemeProvider>
+      <RouterProvider router={router} />
+    </ThemeProvider>
   </StrictMode>,
 );
