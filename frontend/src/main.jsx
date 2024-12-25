@@ -6,7 +6,7 @@ import Login from './routes/Login';
 import TextToSpeech from './routes/TextToSpeech';
 import Register from './routes/Register';
 import Navbar from './components/Navbar';
-import SavedBlogs from './components/SavedBlogs';
+import SavedBlogs from './routes/SavedBlogs';
 import SavedBlogDetails from './routes/SavedBlogDetails';
 import CreateBlog from './routes/CreateBlog';
 import PublicBlogs from './routes/PublicBlogs';

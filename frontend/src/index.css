@@ -12,4 +12,30 @@ html {
     transition: background-color 0.4s ease, color 0.4s ease;
   }
 
+  /* Dark mode styles for React Quill */
+.quill-dark .ql-toolbar {
+  background-color: #1f2937;
+  border-color: #374151;
+}
+
+.quill-dark .ql-container {
+  background-color: #1f2937;
+  border-color: #374151;
+}
+
+.quill-dark .ql-editor {
+  color: white;
+}
+
+.quill-dark .ql-stroke {
+  stroke: #9ca3af;
+}
+
+.quill-dark .ql-fill {
+  fill: #9ca3af;
+}
+
+.quill-dark .ql-picker {
+  color: #9ca3af;
+}
   
