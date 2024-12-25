@@ -1,66 +1,66 @@
-// src/components/CreateBlog.jsx
 import React, { useState } from 'react';
-import { useEditor, EditorContent } from '@tiptap/react';
-import StarterKit from '@tiptap/starter-kit';
-import Placeholder from '@tiptap/extension-placeholder';
-import OrderedList from '@tiptap/extension-ordered-list';
-import BulletList from '@tiptap/extension-bullet-list';
+import { motion, AnimatePresence } from 'framer-motion';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 import { useTheme } from '../context/ThemeContext';
 
 function CreateBlog() {
   const [blogTitle, setBlogTitle] = useState('');
   const [blogContent, setBlogContent] = useState('');
   const [isPublic, setIsPublic] = useState(true);
-  const [notification, setNotification] = useState('');
-  const [notificationType, setNotificationType] = useState('');
+  const [notification, setNotification] = useState({ message: '', type: '' });
   const [isLoading, setIsLoading] = useState(false);
   const { isDarkMode } = useTheme();
 
-  // Set up the editor with Tiptap
-  const editor = useEditor({
-    extensions: [
-      StarterKit,
-      Placeholder.configure({
-        placeholder: 'Write your blog content...',
-        emptyNodeClass: 'placeholder:text-gray-400',
-      }),
-      OrderedList,
-      BulletList,
+  const modules = {
+    toolbar: [
+      [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+      ['bold', 'italic', 'underline', 'strike'],
+      [{ 'color': [] }, { 'background': [] }],
+      [{ 'align': [] }],
+      [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+      ['blockquote', 'code-block'],
+      ['link', 'image'],
+      ['clean']
     ],
-    content: blogContent,
-    onUpdate: ({ editor }) => {
-      setBlogContent(editor.getHTML());
-    },
-  });
+  };
+
+  const formats = [
+    'header',
+    'bold', 'italic', 'underline', 'strike',
+    'color', 'background',
+    'align',
+    'list', 'bullet',
+    'blockquote', 'code-block',
+    'link', 'image'
+  ];
+
+  const showNotification = (message, type) => {
+    setNotification({ message, type });
+    setTimeout(() => setNotification({ message: '', type: '' }), 5000);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setNotification(''); // Clear previous notifications
-    setNotificationType('');
-    setIsLoading(true); // Start loading
-  
-    const token = localStorage.getItem('token');
-    if (!token) {
-      setNotification('You must be logged in to create a blog.');
-      setNotificationType('error');
-      setIsLoading(false);
+
+    if (!localStorage.getItem('token')) {
+      showNotification('Please login to create a blog', 'error');
       return;
     }
-  
+
     if (!blogTitle.trim() || !blogContent.trim()) {
-      setNotification('Blog title and content are required.');
-      setNotificationType('error')
-      setIsLoading(false);
+      showNotification('Title and content are required', 'error');
       return;
     }
-  
+
+    setIsLoading(true);
     try {
-      const url = import.meta.env.VITE_API_BASE_URL; // Ensure this is set in your .env file
+      const url = import.meta.env.VITE_API_BASE_URL;
       const response = await fetch(`${url}/api/create-blog`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
         body: JSON.stringify({
           blogTitle,
@@ -68,149 +68,149 @@ function CreateBlog() {
           isPublic: isPublic ? 'true' : 'false',
         }),
       });
-  
+
       if (response.ok) {
-        setNotification('Blog created successfully!');
-        setNotificationType('success');
+        showNotification('Blog created successfully! 🎉', 'success');
         setBlogTitle('');
         setBlogContent('');
         setIsPublic(true);
-        setTimeout(() => {
-          setNotification('');
-        }, 5000);
       } else {
-        const errorData = await response.json();
-        setNotification(errorData.error || 'An error occurred while creating the blog.');
-        setNotificationType('error'), 5000;
+        throw new Error('Failed to create blog');
       }
     } catch (error) {
-      setNotification('An error occurred while creating the blog.');
-      setNotificationType('error');
+      showNotification('Failed to create blog', 'error');
     } finally {
       setIsLoading(false);
     }
   };
-  
 
   return (
-    <div className={`min-h-screen flex flex-col items-center justify-center ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-900'} px-4`}>
-      <h1 className="text-xl text-center m-2">Create a New Blog</h1>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      className={`min-h-screen py-8 px-4 ${
+        isDarkMode ? 'bg-gray-900' : 'bg-gray-50'
+      }`}
+    >
+      <div className="max-w-4xl mx-auto">
+        {/* Header with Animation */}
+        <motion.div
+          initial={{ y: -20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.5 }}
+          className="text-center mb-8"
+        >
+          <h1 className={`text-4xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>
+            Create Your Blog
+          </h1>
+          <p className={`mt-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+            Share your thoughts with the world
+          </p>
+        </motion.div>
 
-      {notification && (
-        <div className={`p-2 rounded-lg mb-4 ${notificationType === 'success' ? 'bg-green-200 text-green-800' : 'bg-red-200 text-red-800'}`}>
-          {notification}
-        </div>
-      )}
+        {/* Notification */}
+        <AnimatePresence>
+          {notification.message && (
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              className={`mb-6 p-4 rounded-lg ${
+                notification.type === 'success'
+                  ? 'bg-green-100 text-green-800 border-l-4 border-green-500'
+                  : 'bg-red-100 text-red-800 border-l-4 border-red-500'
+              }`}
+            >
+              {notification.message}
+            </motion.div>
+          )}
+        </AnimatePresence>
 
-      <form onSubmit={handleSubmit} className="w-full max-w-3xl mx-auto">
-        {/* Card for title input and editor */}
-        <div className={`p-6 shadow-lg rounded-lg ${isDarkMode ? 'bg-gray-800 text-gray-200' : 'bg-white text-gray-900'}`}>
+        <motion.form
+          onSubmit={handleSubmit}
+          className="space-y-6"
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.2 }}
+        >
           {/* Blog Title */}
-          <input
-            type="text"
-            value={blogTitle}
-            onChange={(e) => setBlogTitle(e.target.value)}
-            className={`w-full p-3 mb-4 rounded-lg shadow-sm focus:outline-none focus:ring-2 ${isDarkMode ? 'bg-neutral-800 text-gray-200 focus:ring-indigo-500' : 'bg-white text-gray-900 focus:ring-blue-500'}`}
-            placeholder="Enter blog title..."
-          />
+          <motion.div
+            whileHover={{ scale: 1.01 }}
+            className="rounded-lg shadow-sm"
+          >
+            <input
+              type="text"
+              value={blogTitle}
+              onChange={(e) => setBlogTitle(e.target.value)}
+              placeholder="Enter your blog title..."
+              className={`w-full p-4 rounded-lg border-2 focus:ring-2 transition-all ${
+                isDarkMode
+                  ? 'bg-gray-800 text-white border-gray-700 focus:border-blue-500'
+                  : 'bg-white text-gray-900 border-gray-200 focus:border-blue-500'
+              }`}
+            />
+          </motion.div>
 
           {/* Rich Text Editor */}
-          <div className="rounded-lg overflow-hidden">
-            <div id="hs-editor-tiptap">
-              <div className={`flex gap-x-1 border-b p-2 ${isDarkMode ? 'border-neutral-700' : 'border-gray-200'}`}>
-                {/* Toolbar Buttons */}
-                <button
-                  type="button"
-                  onClick={() => editor.chain().focus().toggleBold().run()}
-                  className={`p-2 rounded-full hover:bg-gray-200 focus:outline-none dark:hover:bg-neutral-700 ${isDarkMode ? 'text-white' : 'text-gray-800'}`}
-                >
-                  <svg className="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M14 12a4 4 0 0 0 0-8H6v8"></path>
-                    <path d="M15 20a4 4 0 0 0 0-8H6v8Z"></path>
-                  </svg>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => editor.chain().focus().toggleItalic().run()}
-                  className={`p-2 rounded-full hover:bg-gray-200 focus:outline-none dark:hover:bg-neutral-700 ${isDarkMode ? 'text-white' : 'text-gray-800'}`}
-                >
-                  <svg className="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" strokeWidth="2">
-                    <line x1="19" x2="10" y1="4" y2="4"></line>
-                    <line x1="14" x2="5" y1="20" y2="20"></line>
-                    <line x1="15" x2="9" y1="4" y2="20"></line>
-                  </svg>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => editor.chain().focus().toggleOrderedList().run()}
-                  className={`p-2 rounded-full hover:bg-gray-200 focus:outline-none dark:hover:bg-neutral-700 ${isDarkMode ? 'text-white' : 'text-gray-800'}`}
-                >
-                  <svg className="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" strokeWidth="2">
-                    <line x1="10" x2="21" y1="6" y2="6"></line>
-                    <line x1="10" x2="21" y1="12" y2="12"></line>
-                    <line x1="10" x2="21" y1="18" y2="18"></line>
-                    <path d="M4 6h1v4"></path>
-                    <path d="M4 10h2"></path>
-                    <path d="M6 18H4c0-1 2-2 2-3s-1-1.5-2-1"></path>
-                  </svg>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => editor.chain().focus().toggleBulletList().run()}
-                  className={`p-2 rounded-full hover:bg-gray-200 focus:outline-none dark:hover:bg-neutral-700 ${isDarkMode ? 'text-white' : 'text-gray-800'}`}
-                >
-                  <svg className="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" strokeWidth="2">
-                    <line x1="8" x2="21" y1="6" y2="6"></line>
-                    <line x1="8" x2="21" y1="12" y2="12"></line>
-                    <line x1="8" x2="21" y1="18" y2="18"></line>
-                    <line x1="3" x2="3.01" y1="6" y2="6"></line>
-                    <line x1="3" x2="3.01" y1="12" y2="12"></line>
-                    <line x1="3" x2="3.01" y1="18" y2="18"></line>
-                  </svg>
-                </button>
-              </div>
-
-              {/* Editor Content Area */}
-              <EditorContent
-                editor={editor}
-                className={`h-[10rem] overflow-auto p-4 transition-all duration-200 placeholder-gray-400 ${isDarkMode ? 'bg-neutral-900 text-gray-200' : 'bg-white text-gray-900'
-                  }`}
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* Controls Row for Public Checkbox and Submit Button */}
-        <div className="flex items-center justify-between mt-4">
-          <div className="flex items-center">
-            <label htmlFor="isPublic" className="mr-2">Make Public:</label>
-            <input
-              type="checkbox"
-              id="isPublic"
-              checked={isPublic}
-              onChange={(e) => setIsPublic(e.target.checked)}
-              className="h-6 w-6 text-blue-600 border-gray-300 rounded"
-            />
-          </div>
-
-          {/* Submit Button */}
-          <button
-            type="submit"
-            className={`py-3 px-4 flex justify-center items-center text-sm font-medium rounded-full border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none ${isLoading ? 'cursor-not-allowed' : ''
-              }`}
-            disabled={isLoading}
+          <motion.div
+            whileHover={{ scale: 1.01 }}
+            className={`rounded-lg shadow-lg overflow-hidden ${
+              isDarkMode ? 'quill-dark' : ''
+            }`}
           >
-            {isLoading ? (
-              <span className="animate-spin inline-block h-5 w-5 border-[3px] border-current border-t-transparent text-white rounded-full" role="status" aria-label="loading">
-                <span className="sr-only">Loading...</span>
+            <ReactQuill
+              theme="snow"
+              value={blogContent}
+              onChange={setBlogContent}
+              modules={modules}
+              formats={formats}
+              className={isDarkMode ? 'bg-gray-800 text-white' : 'bg-white'}
+            />
+          </motion.div>
+
+          {/* Controls */}
+          <motion.div
+            className="flex items-center justify-between"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+          >
+            <label className="flex items-center space-x-2">
+              <input
+                type="checkbox"
+                checked={isPublic}
+                onChange={(e) => setIsPublic(e.target.checked)}
+                className="w-5 h-5 rounded text-blue-600"
+              />
+              <span className={`${isDarkMode ? 'text-white' : 'text-gray-700'}`}>
+                Make Public
               </span>
-            ) : (
-              <>Create Blog</>
-            )}
-          </button>
-        </div>
-      </form>
-    </div>
+            </label>
+
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              type="submit"
+              disabled={isLoading}
+              className="px-6 py-3 rounded-lg bg-gradient-to-r from-blue-500 to-blue-600 
+                       text-white font-medium shadow-lg hover:shadow-xl
+                       disabled:opacity-50 transition-all"
+            >
+              {isLoading ? (
+                <span className="flex items-center space-x-2">
+                  <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                  </svg>
+                  <span>Creating...</span>
+                </span>
+              ) : (
+                'Create Blog'
+              )}
+            </motion.button>
+          </motion.div>
+        </motion.form>
+      </div>
+    </motion.div>
   );
 }
 
