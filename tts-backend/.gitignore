@@ -2,3 +2,7 @@
 layers/common/nodejs/node_modules
 # node_modules
 node_modules/
+
+.serverless/
+
+serverless.yml
