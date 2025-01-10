@@ -47,20 +47,6 @@ app.post('/api/save-blog', authenticateToken, async (req, res) => {
   }
 });
 
-// app.get('/api/get-blogs', authenticateToken, async (req, res) => {
-//   const username = req.user.username;
-//   const params = {
-//     TableName: 'SavedBlogs',
-//     KeyConditionExpression: 'username = :username',
-//     ExpressionAttributeValues: { ':username': username },
-//   };
-//   try {
-//     const result = await dynamoDb.query(params).promise();
-//     res.json(result.Items);
-//   } catch (error) {
-//     res.status(500).json({ error: 'Could not retrieve blogs' });
-//   }
-// });
 
 app.get('/api/get-blogs', authenticateToken, async (req, res) => {
   console.log('Authenticated user:', req.user); // Log the authenticated user
@@ -120,5 +106,54 @@ app.delete('/api/delete-blog', authenticateToken, async (req, res) => {
     res.status(500).json({ error: 'Could not delete blog' });
   }
 });
+
+
+app.get('/api/public-blogs', async (req, res) => {
+  const params = {
+    TableName: 'Blogs',
+    IndexName: 'isPublic-index', // Assuming you've created a secondary index on 'isPublic'
+    KeyConditionExpression: 'isPublic = :isPublic',
+    ExpressionAttributeValues: {
+      ':isPublic': 'true', // Use 'true' as string instead of boolean true
+    },
+  };
+
+  try {
+    const result = await dynamoDb.query(params).promise();
+    res.json(result.Items);
+  } catch (error) {
+    console.error('Error retrieving public blogs:', error);
+    res.status(500).json({ error: 'Could not retrieve public blogs' });
+  }
+});
+
+app.get('/api/public-blog/:blogId', async (req, res) => {
+  const { blogId } = req.params;
+
+  const params = {
+    TableName: 'Blogs',
+    IndexName: 'blogId-index', // Use the GSI
+    KeyConditionExpression: 'blogId = :blogId', // Query on the blogId partition key
+    ExpressionAttributeValues: {
+      ':blogId': blogId
+    },
+    ProjectionExpression: 'blogId, username, blogTitle, blogContent, isPublic, createdAt' // Only retrieve necessary fields
+  };
+
+  try {
+    const result = await dynamoDb.query(params).promise();
+
+    // Check if the blog exists and is public
+    if (result.Items.length === 0 || result.Items[0].isPublic !== 'true') {
+      return res.status(404).json({ error: 'Public blog not found' });
+    }
+
+    res.json(result.Items[0]); // Return the first matching item
+  } catch (error) {
+    console.error('Error retrieving public blog:', error);
+    res.status(500).json({ error: 'Could not retrieve public blog' });
+  }
+});
+
 
 module.exports.handler = serverless(app);
